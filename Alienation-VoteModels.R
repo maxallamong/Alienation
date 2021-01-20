@@ -15,59 +15,97 @@
 # Models ----
   # Turnout ----
   
-    # 2016 (LPM) ----
-    turnout.16 <- lm(vote16 ~ alien.cynicism * elect.attn + party.strength + educ  + ind +
-                       income.q + white + age,
-                     data = mydata.16)
-    summary(turnout.16)
-
-    plot_model(turnout.16, type = "int") + # plot
-      labs(x = "Cynicism", y = "Probability of Turnout in 2016 General Election", title = "") +
-      scale_colour_discrete(name = "Elections Make Gov. Pay Attention?", labels = c("Responsive", "Unresponsive")) +
-      theme(axis.text = element_text(size = 22),
-            axis.title = element_text(size = 26),
-            legend.title = element_text(size = 20),
-            legend.text = element_text(size = 20),
-            plot.margin = margin(1,1,1,1,"cm"),
-            panel.border = element_rect(color="black", fill=NA),
-            #panel.grid.major = element_blank(),
-            #panel.grid.minor = element_blank(),
-            plot.title = element_text(size = 28, face = "bold", hjust = 0.5),
-            strip.background = element_rect(fill="white", color="black"))
-
-    stargazer(turnout.16, digits = 3, # table
-              intercept.bottom = T, dep.var.labels.include = F,
-              covariate.labels = c("Normlessness", "Gov. Responsiveness", "Partisan Strength",
-                                   "Education", "Independent", "Income", "White", "Age",
-                                   "Normlessness \\times Gov. Responsiveness", "Constant"),
+    # Primary Election, 1988-2016 (Logit) ----
+    primturnout.16 <- glm(voteprimary16 ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2016
+                        income.q + white + age, 
+                      data = mydata.16, family = "binomial")
+    summary(primturnout.16)
+    primturnout.16.df <- data.frame(t = coef(primturnout.16) / sqrt(diag(vcov(primturnout.16))),
+                                df = primturnout.16$df.null)
+    primturnout.16.df <- primturnout.16.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.12 <- glm(voteprimary12 ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2012
+                        income.q + white + age, 
+                      data = mydata.12, family = "binomial")
+    summary(primturnout.12)
+    primturnout.12.df <- data.frame(t = coef(primturnout.12) / sqrt(diag(vcov(primturnout.12))),
+                                df = primturnout.12$df.null)
+    primturnout.12.df <- primturnout.12.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.08 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2008
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 2008), family = "binomial")   
+    summary(primturnout.08)
+    primturnout.08.df <- data.frame(t = coef(primturnout.08) / sqrt(diag(vcov(primturnout.08))),
+                                df = primturnout.08$df.null)
+    primturnout.08.df <- primturnout.08.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.04 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2004
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 2004), family = "binomial")   
+    summary(primturnout.04)
+    primturnout.04.df <- data.frame(t = coef(primturnout.04) / sqrt(diag(vcov(primturnout.04))),
+                                df = primturnout.04$df.null)
+    primturnout.04.df <- primturnout.04.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.00 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2000
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 2000), family = "binomial")    
+    summary(primturnout.00)
+    primturnout.00.df <- data.frame(t = coef(primturnout.00) / sqrt(diag(vcov(primturnout.00))),
+                                df = primturnout.00$df.null)
+    primturnout.00.df <- primturnout.00.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.96 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 1996
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 1996), family = "binomial") 
+    summary(primturnout.96)
+    primturnout.96.df <- data.frame(t = coef(primturnout.96) / sqrt(diag(vcov(primturnout.96))),
+                                df = primturnout.96$df.null)
+    primturnout.96.df <- primturnout.96.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.92 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 1992
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 1992), family = "binomial") 
+    summary(primturnout.92)
+    primturnout.92.df <- data.frame(t = coef(primturnout.92) / sqrt(diag(vcov(primturnout.92))),
+                                df = primturnout.92$df.null)
+    primturnout.92.df <- primturnout.92.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    
+    primturnout.88 <- glm(voteprimary ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 1988
+                        income.q + white + age, data = mydata.cdf, 
+                      subset = (year == 1988), family = "binomial")
+    summary(primturnout.88)
+    primturnout.88.df <- data.frame(t = coef(primturnout.88) / sqrt(diag(vcov(primturnout.88))),
+                                df = primturnout.88$df.null)
+    primturnout.88.df <- primturnout.88.df %>% 
+      mutate(p = ifelse(t < 0, pt(t, df, lower = TRUE), pt(t, df, lower = FALSE)))
+    
+    stargazer(primturnout.88, primturnout.92, primturnout.96, primturnout.00, primturnout.04, 
+              primturnout.08, primturnout.12, primturnout.16, digits = 3,
+              dep.var.labels.include = F,
+              p = list(primturnout.88.df$p, primturnout.92.df$p, primturnout.96.df$p, primturnout.00.df$p,
+                       primturnout.04.df$p, primturnout.08.df$p, primturnout.12.df$p, primturnout.16.df$p),
+              covariate.labels = c("Cynicism", "Gov. Unresponsive", "Partisan Strength", 
+                                   "Education", "Independent", "Income", "White", "Age", "Constant"),
               column.labels = c("1988", "1992", "1996","2000","2004","2008","2012", "2016"),
               keep.stat = c("n","aic"))
-
-
-    # Maringal Effects Plot
-    beta.hat <- coef(turnout.16)  # marginal effects
-    cov <- vcov(turnout.16)
-    z0 <- seq(min(mydata.16$elect.attn, na.rm = T), max(mydata.16$elect.attn, na.rm = T), length.out = 1000)
-    dy.dx <- beta.hat["alien.cynicism"] + beta.hat["alien.cynicism:elect.attn"]*z0
-    se.dy.dx <- sqrt(cov["alien.cynicism", "alien.cynicism"] +
-                       z0^2*cov["alien.cynicism:elect.attn", "alien.cynicism:elect.attn"] +
-                       2*z0*cov["alien.cynicism", "alien.cynicism:elect.attn"])
-    upr <- dy.dx + 1.96*se.dy.dx
-    lwr <- dy.dx - 1.96*se.dy.dx
-
-    par(family="serif",bty="l",mar=c(5,5.5,2,2))
-    plot(x=z0, y=dy.dx,type="n",xlim=c(min(z0),max(z0)),
-         ylim=c(min(lwr),max(upr)),
-         xlab = "Unresponsiveness",
-         ylab = expression(frac(partialdiff*paste("Turnout"),
-                                partialdiff*paste("Cynicism"))),
-         main="Marginal Effect of Cynicism on Turnout as Unresponsiveness Varies")
-    lines(z0, dy.dx, lwd = 3)
-    lines(z0, lwr)
-    lines(z0, upr)
-    abline(h=0,lty=2)
     
-    # 1988-2016 (Logit) ----
+    # General Election, 1988-2016 (Logit) ----
     turnout.16 <- glm(vote16 ~ alien.cynicism + elect.attn + party.strength + educ + ind + # 2016
                         income.q + white + age, 
                       data = mydata.16, family = "binomial")

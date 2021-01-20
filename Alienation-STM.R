@@ -91,14 +91,26 @@
     dev.off()
     
     # Top 8 topics
-    pdf(height = 8, width = 16, "Figures/top8topics.pdf")
-    par(cex = 1.7, lwd = 2)
+    pdf(height = 8, width = 8, "Figures/top8topics.pdf")
+    par(cex = 1.35, lwd = 2, mar = c(4,1,1,1))
     plot(fit.add, type = "summary", labeltype = "frex", 
          topics = c(12,5,23,2,21,26,1,4), n = 5, main = "",
-         topic.names = c("(Alternative to Sec. Clinton)", "(Business Experience)", 
-                           "(Political Outsider)", "(Supreme Court)", 
-                           "(Immigration)", "(Lesser of Two Evils)", 
-                           "(Economy)","(Make America Great Again)"), xlim = c(0,0.15))
+         topic.names = c("","","","","","","",""),
+         #custom.labels = c("","","","","","","",""),
+         #topic.names = c("(Alternative to Sec. Clinton)", "(Business Experience)", 
+                           #"(Political Outsider)", "(Supreme Court)", 
+                           #"(Immigration)", "(Lesser of Two Evils)", 
+                           #"(Economy)","(Make America Great Again)"), xlim = c(0,0.08),
+    xlim = c(0,0.14),
+    ylim = c(0.5,8.5))
+    text(0,8.25,"(Alternative to Sec. Clinton)", pos = 4, col = "red")
+    text(0,7.25,"(Business Experience)", pos = 4, col = "red")
+    text(0,6.25,"(Political Outsider)", pos = 4, col = "red")
+    text(0,5.25,"(Supreme Court)", pos = 4, col = "red")
+    text(0,4.25,"(Immigration)", pos = 4, col = "red")
+    text(0,3.25,"(Lesser of Two Evils)", pos = 4, col = "red")
+    text(0,2.25,"(Economy)", pos = 4, col = "red")
+    text(0,1.25,"(MAGA)", pos = 4, col = "red")
     dev.off()
     
     # Exemplary Documents -----
@@ -106,9 +118,9 @@
                                topics = c(23), n = 175)$docs[[1]])
     outsider.thoughts <- c(outsider.thoughts[27], outsider.thoughts[30], outsider.thoughts[87], 
                       outsider.thoughts[110], outsider.thoughts[169], outsider.thoughts[175]) 
-    pdf(height = 5, width = 8, "Figures/exemplar-texts.pdf")
-    par()
-    plotQuote(outsider.thoughts, text.cex = 1, width = 85)
+    pdf(height = 8, width = 8, "Figures/exemplar-texts.pdf")
+    par(cex = 1.35, lwd = 2, mar = c(4,1,1,1))
+    plotQuote(outsider.thoughts, text.cex = 1, width = 50)
     dev.off()
     
   # Estimate ----
