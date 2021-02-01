@@ -114,6 +114,9 @@
                   ifelse(pid == 4, "Ind", # independent
                   ifelse(pid == 5 | pid == 6 | pid == 7, "Rep", NA)))) %>% # republicans
     mutate(pid3 = as.factor(pid3)) %>%
+    mutate(rep = ifelse(pid3 == "Rep", 1, 0)) %>%
+    mutate(dem = ifelse(pid3 == "Dem", 1, 0)) %>%
+    mutate(ind = ifelse(pid3 == "Ind", 1, 0)) %>%
     mutate(pid7 = pid) %>%
     mutate(pid7 = ifelse(pid7 > 0, pid7, NA)) %>%
     mutate(party.strength = ifelse(pid7 == 1 | pid7 == 7, 3, # strong 
@@ -122,8 +125,8 @@
                             ifelse(pid7 == 4, 0, NA))))) %>%
     mutate(ind = ifelse(pid3 == "Ind", 1, 0)) %>% # indicator for independent
     mutate(pol.int = ifelse(pol.int == 1, 3, # very much interested
-                            ifelse(pol.int == 2, 2, # somehwhat interested
-                                   ifelse(pol.int == 3, 1, NA)))) %>% # not much interested
+                     ifelse(pol.int == 2, 2, # somehwhat interested
+                     ifelse(pol.int == 3, 1, NA)))) %>% # not much interested
     # mutate(vote16 = ifelse(vote16 == 0, 0, 
     #                 ifelse(vote16 == 1, 1, NA))) %>% # 1 = Voted, 0 = Did not vote
     mutate(vote16 = ifelse(reg.vote == 2, 1, 0)) %>%
@@ -139,7 +142,7 @@
                                  ifelse(voteprimarychoice16 == 1 | voteprimarychoice16 == 3 |
                                         voteprimarychoice16 == 5 | voteprimarychoice16 == 6 |
                                         voteprimarychoice16 == 7 | voteprimarychoice16 == 8 |
-                                        voteprimarychoice16 == 9, "Any Other Candidate",
+                                        voteprimarychoice16 == 9, "Other",
                                  ifelse(voteprimary16 == 0, "Did not vote", NA))))) %>%
     mutate(voteprimarychoice16 = as.factor(voteprimarychoice16)) %>%
     # mutate(votepref16 = ifelse(votepref16 == 10 | votepref16 == 11, "Clinton",

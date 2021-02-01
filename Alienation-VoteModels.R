@@ -1,7 +1,7 @@
 # Maxwell B. Allamong
 # Alie(n)ation: Political Outsiders in the 2016 Election - Vote Models
 # Created: Mar. 12th, 2020
-# Updated: Jan. 3rd, 2020
+# Updated: Feb. 1st, 2021
 
 # READ ME ----
 #  To replicate this analysis, first open the R Project file (Alienation.RProj).
@@ -221,19 +221,19 @@
       geom_point(position=position_dodge(width = .5), size = 4) +
       geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
       geom_errorbar(aes(ymin = cyn.lwr, ymax = cyn.upr), width = 0 , size = 1) +
-      labs(x = "", y = "Coef. Estimate - Cynicism") +
+      labs(x = "", y = "Coefficient - Cynicism\n") +
       #ylim(-0.05,0.10) +
       scale_x_continuous(breaks = seq(1988,2016,4),
                          labels = c("1988","1992","1996","2000","2004","2008","2012","2016")) +
       theme(axis.line = element_line(colour = "black"),
             plot.subtitle = element_text(vjust = 1), 
             plot.caption = element_text(vjust = 1), 
-            plot.margin = margin(0.5,3,0.5,0.5,"cm"),
+            plot.margin = margin(0,0,0,0,"cm"),
             panel.background = element_rect(fill = "white", colour = NA),
             panel.grid.major = element_line(linetype = "blank"), 
             panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 22),
-            axis.text = element_text(size = 18))
+            axis.title = element_text(size = 24),
+            axis.text = element_text(size = 22))
     dev.off()
     
     
@@ -242,30 +242,36 @@
       geom_point(position=position_dodge(width = .5), size = 4) +
       geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
       geom_errorbar(aes(ymin = unresp.lwr, ymax = unresp.upr), width = 0 , size = 1) +
-      labs(x = "", y = "Coef. Estimate - Unresponsive") +
+      labs(x = "", y = "Coefficient - Election Unresp.\n") +
       #ylim(-0.05,0.10) +
       scale_x_continuous(breaks = seq(1988,2016,4),
                          labels = c("1988","1992","1996","2000","2004","2008","2012","2016")) +
       theme(axis.line = element_line(colour = "black"),
             plot.subtitle = element_text(vjust = 1), 
             plot.caption = element_text(vjust = 1), 
-            plot.margin = margin(0.5,3,0.5,0.5,"cm"),
+            plot.margin = margin(0,0,0,0,"cm"),
             panel.background = element_rect(fill = "white", colour = NA),
             panel.grid.major = element_line(linetype = "blank"), 
             panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 22),
-            axis.text = element_text(size = 18))
-      dev.off()  
+            axis.title = element_text(size = 26),
+            axis.text = element_text(size = 24))
+    dev.off()  
       
   # Vote Choice ----
     # Primary Election Vote Model (Multinomial Logit) ----
-    mydata.16$voteprimarychoice16 <- factor(mydata.16$voteprimarychoice16, levels = c("Any Other Candidate", "Sanders", "Trump", "Did not vote"))
-    set.seed(219)
-    primary.mod <- multinom(voteprimarychoice16 ~ alien.cynicism + elect.attn  + pid3 + ideo7 + income.q + party.strength +
-                              educ + white + female + age, data = mydata.16, subset = (sup.tues == 1))
+    mydata.16$voteprimarychoice16 <- factor(mydata.16$voteprimarychoice16, levels = c("Sanders", "Trump", "Other", "Did not vote"))
+    mydata.primary <- mydata.16 %>% # create data frame for primary models
+      select(alien.cynicism, elect.attn, rep, dem, ideo7, income.q,
+             party.strength, educ, white, female, age, voteprimarychoice16, sup.tues) %>%
+      filter(sup.tues == 1) %>%
+      drop_na()
+    set.seed(219) # seed
+    mydata.primary$voteprimarychoice16 <- relevel(mydata.primary$voteprimarychoice16, ref = "Did not vote")
+    primary.mod <- multinom(voteprimarychoice16 ~ alien.cynicism + elect.attn  + rep + dem + ideo7 + income.q + party.strength + # multinomial logit
+                              educ + white + female + age, data = mydata.primary, Hess = T)
     primary.t <- summary(primary.mod)$coefficients/summary(primary.mod)$standard.errors # t values
     primary.p <- ifelse(primary.t < 0, pt(primary.t,primary.mod$edf,lower=T), pt(primary.t,primary.mod$edf,lower=F)) # one-tailed p-values
-    stargazer(primary.mod, digits = 3,
+    stargazer(primary.mod, digits = 3, # create LaTeX table
               dep.var.labels.include = T,
               covariate.labels = c("Cynicism", "Unresponsive to Elec.", "Independent",
                                    "Republican", "Ideology", "Income", "Partisan Strength",
@@ -273,78 +279,289 @@
               keep.stat = c("aic"))
     dim(primary.mod$fitted.values) # N = 602, stargazer doesn't produce N from multinom,
     
-    # Plot
-    effect.prim.cynicism <- effect("alien.cynicism", primary.mod, xlevels = list(alien.cynicism = seq(0,2,0.1)), typical = median,
-                                   fixed.predictors = list(given.values = c(pid3Rep = 1)))
-    effect.prim.unresp <- effect("elect.attn", primary.mod, xlevels = list(elect.attn = seq(0,2,0.1)), typical = median,
-                                 fixed.predictors = list(given.values = c(pid3Rep = 1)))
-    effect.prim.df <- data.frame(fit = c(effect.prim.cynicism$prob[,1], effect.prim.cynicism$prob[,2],
-                                         effect.prim.cynicism$prob[,3], effect.prim.cynicism$prob[,4],
-                                         effect.prim.unresp$prob[,1], effect.prim.unresp$prob[,2],
-                                         effect.prim.unresp$prob[,3], effect.prim.unresp$prob[,4]),
-                                 lwr = c(effect.prim.cynicism$lower.prob[,1], effect.prim.cynicism$lower.prob[,2],
-                                         effect.prim.cynicism$lower.prob[,3], effect.prim.cynicism$lower.prob[,4],
-                                         effect.prim.unresp$lower.prob[,1], effect.prim.unresp$lower.prob[,2],
-                                         effect.prim.unresp$lower.prob[,3], effect.prim.unresp$lower.prob[,4]),
-                                 upr = c(effect.prim.cynicism$upper.prob[,1], effect.prim.cynicism$upper.prob[,2],
-                                         effect.prim.cynicism$upper.prob[,3], effect.prim.cynicism$upper.prob[,4],
-                                         effect.prim.unresp$upper.prob[,1], effect.prim.unresp$upper.prob[,2],
-                                         effect.prim.unresp$upper.prob[,3], effect.prim.unresp$upper.prob[,4]),
-                                 choice = c(rep("Any Other Candidate", 21), rep("Sanders", 21),
-                                            rep("Trump", 21), rep("Did not vote", 21),
-                                            rep("Any Other Candidate", 21), rep("Sanders", 21),
-                                            rep("Trump", 21), rep("Did not vote", 21)),
-                                 x = rep(seq(0,2,0.1),8),
-                                 dimension = c(rep("Cynicism", 84), rep("Gov. Unresponsiveness", 84)))
-    effect.prim.df$choice <- factor(effect.prim.df$choice, levels = c("Sanders","Trump","Any Other Candidate","Did not vote"))
+      # Simulating Predicted Probabilities ----
+      x <- seq(0,2,0.01)
+      primary.coef <- coef(primary.mod)
+      primary.covar <- vcov(primary.mod)
+      set.seed(219)
+      sandersCoef <- mvrnorm(n = 1000, primary.coef[1,], primary.covar[1:12,1:12]) # simulate 1000 coefficients
+      trumpCoef <- mvrnorm(n = 1000, primary.coef[2,], primary.covar[13:24,13:24]) # simulate 1000 coefficients
+      otherCoef <- mvrnorm(n = 1000, primary.coef[3,], primary.covar[25:36,25:36]) # simulate 1000 coefficients
+      
+      # Cynicism ----
+      temp <- matrix(NA, nrow = 1000, ncol = 4)
+      sim.results <- matrix(NA, nrow = 804, ncol = 4)
+      primary.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 8)
+
+      for(i in 1:length(x)){
+        
+        #sandersCoef <- mvrnorm(n = 1000, primary.coef[1,], primary.covar[1:12,1:12]) # simulate 1000 coefficients
+        #trumpCoef <- mvrnorm(n = 1000, primary.coef[2,], primary.covar[13:24,13:24]) # simulate 1000 coefficients
+        #otherCoef <- mvrnorm(n = 1000, primary.coef[3,], primary.covar[25:36,25:36]) # simulate 1000 coefficients
+        
+        for(j in 1:nrow(sandersCoef)){
+          sandersAg <- exp(sandersCoef[j,1] + # sanders aggregator function
+                             sandersCoef[j,2]*x[i] +
+                             sandersCoef[j,3]*mydata.primary$elect.attn +
+                             sandersCoef[j,4]*mydata.primary$rep +
+                             sandersCoef[j,5]*mydata.primary$dem +
+                             sandersCoef[j,6]*mydata.primary$ideo7 +
+                             sandersCoef[j,7]*mydata.primary$income.q +
+                             sandersCoef[j,8]*mydata.primary$party.strength +
+                             sandersCoef[j,9]*mydata.primary$educ + 
+                             sandersCoef[j,10]*mydata.primary$white +
+                             sandersCoef[j,11]*mydata.primary$female +
+                             sandersCoef[j,12]*mydata.primary$age)
+          
+          trumpAg <- exp(trumpCoef[j,1] + # trump aggregator function
+                           trumpCoef[j,2]*x[i] +
+                           trumpCoef[j,3]*mydata.primary$elect.attn +
+                           trumpCoef[j,4]*mydata.primary$rep +
+                           trumpCoef[j,5]*mydata.primary$dem +
+                           trumpCoef[j,6]*mydata.primary$ideo7 +
+                           trumpCoef[j,7]*mydata.primary$income.q +
+                           trumpCoef[j,8]*mydata.primary$party.strength +
+                           trumpCoef[j,9]*mydata.primary$educ + 
+                           trumpCoef[j,10]*mydata.primary$white +
+                           trumpCoef[j,11]*mydata.primary$female +
+                           trumpCoef[j,12]*mydata.primary$age)
+          
+          otherAg <- exp(otherCoef[j,1] + # no vote aggregator function
+                            otherCoef[j,2]*x[i] +
+                            otherCoef[j,3]*mydata.primary$elect.attn +
+                            otherCoef[j,4]*mydata.primary$rep +
+                            otherCoef[j,5]*mydata.primary$dem +
+                            otherCoef[j,6]*mydata.primary$ideo7 +
+                            otherCoef[j,7]*mydata.primary$income.q +
+                            otherCoef[j,8]*mydata.primary$party.strength +
+                            otherCoef[j,9]*mydata.primary$educ + 
+                            otherCoef[j,10]*mydata.primary$white +
+                            otherCoef[j,11]*mydata.primary$female +
+                            otherCoef[j,12]*mydata.primary$age)
+          
+          sanders <- sandersAg / (1 + sandersAg + trumpAg + otherAg) # get probabilities
+          trump <- trumpAg / (1 + sandersAg + trumpAg + otherAg)
+          other <- otherAg / (1 + sandersAg + trumpAg + otherAg)
+          novote <- 1 - sanders - trump - other
+          
+          temp[j,1] <- mean(sanders) # take mean predicted probability of sanders vote across all observable values, store in j-th row, 1st column
+          temp[j,2] <- mean(trump)
+          temp[j,3] <- mean(other)
+          temp[j,4] <- mean(novote)
+        }
+        
+        sim.results[((i*4)-3),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-3),2] <- quantile(temp[,1], 0.5) 
+        sim.results[((i*4)-3),2] <- mean(temp[,1]) # mean of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        sim.results[((i*4)-3),3] <- quantile(temp[,1], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        sim.results[((i*4)-3),4] <- quantile(temp[,1], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        
+        sim.results[((i*4)-2),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-2),2] <- quantile(temp[,2], 0.5) 
+        sim.results[((i*4)-2),2] <- mean(temp[,2]) # mean of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),3] <- quantile(temp[,2], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),4] <- quantile(temp[,2], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        
+        sim.results[((i*4)-1),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-1),2] <- quantile(temp[,3], 0.5) 
+        sim.results[((i*4)-1),2] <- mean(temp[,3]) # mean of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),3] <- quantile(temp[,3], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),4] <- quantile(temp[,3], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        
+        sim.results[((i*4)),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)),2] <- quantile(temp[,4], 0.5) 
+        sim.results[((i*4)),2] <- mean(temp[,4]) # mean of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),3] <- quantile(temp[,4], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),4] <- quantile(temp[,4], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        
+        if (x[i] == 0) { # min
+          primary.probdists.cynicism[,1] <- temp[,1]
+          primary.probdists.cynicism[,2] <- temp[,2]
+          primary.probdists.cynicism[,3] <- temp[,3]
+          primary.probdists.cynicism[,4] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          primary.probdists.cynicism[,5] <- temp[,1]
+          primary.probdists.cynicism[,6] <- temp[,2]
+          primary.probdists.cynicism[,7] <- temp[,3]
+          primary.probdists.cynicism[,8] <- temp[,4]
+        } 
+        
+      }
+      
+      primary.effect.cynicism <- as.data.frame(sim.results) # put results in data frame
+      colnames(primary.effect.cynicism)[1] <- "x"
+      colnames(primary.effect.cynicism)[2] <- "fit"
+      colnames(primary.effect.cynicism)[3] <- "lower"
+      colnames(primary.effect.cynicism)[4] <- "upper"
+      primary.effect.cynicism$voteprimarychoice16 <- rep(c("Sanders","Trump","Other", "Did not vote"),201)
+      primary.effect.cynicism$category <- "Cynicism"
+      
+      # Election Unresponsiveness ----
+      temp <- matrix(NA, nrow = 1000, ncol = 4) # create empty matrices for results
+      sim.results <- matrix(NA, nrow = 804, ncol = 4)
+      primary.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 8)
+      
+      for(i in 1:length(x)){
+        
+        #sandersCoef <- mvrnorm(n = 1000, primary.coef[1,], primary.covar[1:12,1:12]) # simulate 1000 coefficients
+        #trumpCoef <- mvrnorm(n = 1000, primary.coef[2,], primary.covar[13:24,13:24]) # simulate 1000 coefficients
+        #otherCoef <- mvrnorm(n = 1000, primary.coef[3,], primary.covar[25:36,25:36]) # simulate 1000 coefficients
+        
+        for(j in 1:nrow(sandersCoef)){
+          sandersAg <- exp(sandersCoef[j,1] + # sanders aggregator function
+                             sandersCoef[j,2]*mydata.primary$alien.cynicism +
+                             sandersCoef[j,3]*x[i] +
+                             sandersCoef[j,4]*mydata.primary$rep +
+                             sandersCoef[j,5]*mydata.primary$dem +
+                             sandersCoef[j,6]*mydata.primary$ideo7 +
+                             sandersCoef[j,7]*mydata.primary$income.q +
+                             sandersCoef[j,8]*mydata.primary$party.strength +
+                             sandersCoef[j,9]*mydata.primary$educ + 
+                             sandersCoef[j,10]*mydata.primary$white +
+                             sandersCoef[j,11]*mydata.primary$female +
+                             sandersCoef[j,12]*mydata.primary$age)
+          
+          trumpAg <- exp(trumpCoef[j,1] + # trump aggregator function
+                           trumpCoef[j,2]*mydata.primary$alien.cynicism +
+                           trumpCoef[j,3]*x[i] +
+                           trumpCoef[j,4]*mydata.primary$rep +
+                           trumpCoef[j,5]*mydata.primary$dem +
+                           trumpCoef[j,6]*mydata.primary$ideo7 +
+                           trumpCoef[j,7]*mydata.primary$income.q +
+                           trumpCoef[j,8]*mydata.primary$party.strength +
+                           trumpCoef[j,9]*mydata.primary$educ + 
+                           trumpCoef[j,10]*mydata.primary$white +
+                           trumpCoef[j,11]*mydata.primary$female +
+                           trumpCoef[j,12]*mydata.primary$age)
+          
+          otherAg <- exp(otherCoef[j,1] + # no vote aggregator function
+                            otherCoef[j,2]*mydata.primary$alien.cynicism +
+                            otherCoef[j,3]*x[i] +
+                            otherCoef[j,4]*mydata.primary$rep +
+                            otherCoef[j,5]*mydata.primary$dem +
+                            otherCoef[j,6]*mydata.primary$ideo7 +
+                            otherCoef[j,7]*mydata.primary$income.q +
+                            otherCoef[j,8]*mydata.primary$party.strength +
+                            otherCoef[j,9]*mydata.primary$educ + 
+                            otherCoef[j,10]*mydata.primary$white +
+                            otherCoef[j,11]*mydata.primary$female +
+                            otherCoef[j,12]*mydata.primary$age)
+          
+          sanders <- sandersAg / (1 + sandersAg + trumpAg + otherAg) # get probabilities
+          trump <- trumpAg / (1 + sandersAg + trumpAg + otherAg)
+          other <- otherAg / (1 + sandersAg + trumpAg + otherAg)
+          novote <- 1 - sanders - trump - other
+          
+          temp[j,1] <- mean(sanders) # take mean predicted probability of sanders vote across all observable values, store in j-th row, 1st column
+          temp[j,2] <- mean(trump)
+          temp[j,3] <- mean(other)
+          temp[j,4] <- mean(novote)
+        }
+        
+        sim.results[((i*4)-3),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-3),2] <- quantile(temp[,1], 0.5) 
+        sim.results[((i*4)-3),2] <- mean(temp[,1]) # mean of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        sim.results[((i*4)-3),3] <- quantile(temp[,1], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        sim.results[((i*4)-3),4] <- quantile(temp[,1], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Sanders)
+        
+        sim.results[((i*4)-2),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-2),2] <- quantile(temp[,2], 0.5) 
+        sim.results[((i*4)-2),2] <- mean(temp[,2]) # mean of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),3] <- quantile(temp[,2], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),4] <- quantile(temp[,2], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        
+        sim.results[((i*4)-1),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-1),2] <- quantile(temp[,3], 0.5) 
+        sim.results[((i*4)-1),2] <- mean(temp[,3]) # mean of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),3] <- quantile(temp[,3], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),4] <- quantile(temp[,3], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        
+        sim.results[((i*4)),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)),2] <- quantile(temp[,4], 0.5) 
+        sim.results[((i*4)),2] <- mean(temp[,4]) # mean of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),3] <- quantile(temp[,4], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),4] <- quantile(temp[,4], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        
+        if (x[i] == 0) { # min
+          primary.probdists.unresp[,1] <- temp[,1]
+          primary.probdists.unresp[,2] <- temp[,2]
+          primary.probdists.unresp[,3] <- temp[,3]
+          primary.probdists.unresp[,4] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          primary.probdists.unresp[,5] <- temp[,1]
+          primary.probdists.unresp[,6] <- temp[,2]
+          primary.probdists.unresp[,7] <- temp[,3]
+          primary.probdists.unresp[,8] <- temp[,4]
+        } 
+      }
+      
+      primary.effect.unresp <- as.data.frame(sim.results) # put results in data frame
+      colnames(primary.effect.unresp)[1] <- "x"
+      colnames(primary.effect.unresp)[2] <- "fit"
+      colnames(primary.effect.unresp)[3] <- "lower"
+      colnames(primary.effect.unresp)[4] <- "upper"
+      primary.effect.unresp$voteprimarychoice16 <- rep(c("Sanders","Trump","Other", "Did not vote"),201)
+      primary.effect.unresp$category <- "Election Unresp."
     
-    pdf(height = 12, width = 12, "Figures/Probs-Primary.pdf")
-    ggplot(effect.prim.df, aes(x = x, y = fit, colour = choice)) +
-      geom_line(size = 2) +
-      geom_line(aes(y = lwr), lty = "dashed") +
-      geom_line(aes(y = upr), lty = "dashed") +
-      labs(x = "", y = "Probability of Vote Choice") +
-      facet_grid(rows = vars(choice), cols = vars(dimension), scales = "free_y") +
-      scale_colour_manual("", values = c("#377EB8","#E41A1C","#4DAF4A","#984EA3")) +
-      theme(axis.line = element_line(colour = "black"),
-            plot.subtitle = element_text(vjust = 1), 
-            plot.caption = element_text(vjust = 1), 
-            plot.margin = margin(0.5,3,0.5,0.5,"cm"),
-            legend.text = element_text(size = 18),
-            legend.position = "bottom",
-            panel.background = element_rect(fill = "white", colour = "black", size = 1),
-            panel.grid.major = element_line(linetype = "blank"), 
-            panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 22),
-            axis.text = element_text(size = 18),
-            strip.text = element_text(size = 18))
-    dev.off()
-    
-    # Sanders
-    se.sanders.l <- effect.prim.cynicism$se.prob[1,2]
-    se.sanders.h <- effect.prim.cynicism$se.prob[21,2]
-    est.sanders.l <- effect.prim.cynicism$prob[1,2]
-    est.sanders.h <- effect.prim.cynicism$prob[21,2]
-    t.sanders <- (est.sanders.h - est.sanders.l)/(sqrt(se.sanders.h^2 + se.sanders.l^2))
-    p.sanders <- 2*pnorm(-abs(t.sanders))
-    
-    # Trump
-    se.trump.l <- effect.prim.cynicism$se.prob[1,3]
-    se.trump.h <- effect.prim.cynicism$se.prob[21,3]
-    est.trump.l <- effect.prim.cynicism$prob[1,3]
-    est.trump.h <- effect.prim.cynicism$prob[21,3]
-    t.trump <- (est.trump.h - est.trump.l)/(sqrt(se.trump.h^2 + se.trump.l^2))
-    p.trump <- 2*pnorm(-abs(t.trump))
-    
-    
-    
-    
-    
+      # Combine results and plot ----
+      primary.effects <- rbind(primary.effect.cynicism, primary.effect.unresp)
+      primary.effects$voteprimarychoice16 <- factor(primary.effects$voteprimarychoice16, levels = c("Sanders","Trump","Other", "Did not vote"))
+      
+      pdf(height = 12, width = 12, "Figures/Probs-Primary.pdf")
+      ggplot(primary.effects, aes(x = x, y = fit, colour = voteprimarychoice16)) +
+        geom_line(size = 2) +
+        geom_line(aes(y = lower), lty = "dashed") +
+        geom_line(aes(y = upper), lty = "dashed") +
+        labs(x = "", y = "Probability of Vote Choice") +
+        facet_grid(rows = vars(voteprimarychoice16), cols = vars(category), scales = "free_y") +
+        scale_colour_manual("", values = c("#377EB8","#E41A1C","#4DAF4A","#984EA3")) +
+        scale_x_continuous(breaks = c(0,1,2)) +
+        theme(axis.line = element_line(colour = "black"),
+              plot.subtitle = element_text(vjust = 1), 
+              plot.caption = element_text(vjust = 1), 
+              plot.margin = margin(0.5,3,0.5,0.5,"cm"),
+              legend.text = element_text(size = 18),
+              legend.position = "bottom",
+              panel.background = element_rect(fill = "white", colour = "black", size = 1),
+              panel.grid.major = element_line(linetype = "blank"), 
+              panel.grid.minor = element_line(linetype = "blank"),
+              axis.title = element_text(size = 22),
+              axis.text = element_text(size = 18),
+              strip.text = element_text(size = 18))
+      dev.off()
+      
+      # Differences in Predicted Probabilities ----
+      primary.probdists.cynicism <- as.data.frame(primary.probdists.cynicism)
+      primary.probdists.unresp <- as.data.frame(primary.probdists.unresp)
+      colnames(primary.probdists.cynicism) <- c("sanders.lo","trump.lo","other.lo","dnv.lo",
+                                                "sanders.hi","trump.hi","other.hi","dnv.hi")
+      colnames(primary.probdists.unresp) <- c("sanders.lo","trump.lo","other.lo","dnv.lo",
+                                              "sanders.hi","trump.hi","other.hi","dnv.hi")
+
+      t.test(primary.probdists.cynicism$sanders.hi, primary.probdists.cynicism$sanders.lo)
+      t.test(primary.probdists.cynicism$trump.hi, primary.probdists.cynicism$trump.lo)
+      t.test(primary.probdists.cynicism$other.hi, primary.probdists.cynicism$other.lo)
+      t.test(primary.probdists.cynicism$dnv.hi, primary.probdists.cynicism$dnv.lo)
+
+      t.test(primary.probdists.unresp$sanders.hi, primary.probdists.unresp$sanders.lo)
+      t.test(primary.probdists.unresp$trump.hi, primary.probdists.unresp$trump.lo)
+      t.test(primary.probdists.unresp$other.hi, primary.probdists.unresp$other.lo)
+      t.test(primary.probdists.unresp$dnv.hi, primary.probdists.unresp$dnv.lo)
+      
     # General Election Vote Model (Multinomial Logit) ----
     mydata.16$votechoice16 <- factor(mydata.16$votechoice16, levels = c("Clinton","Trump","Other","Did not vote"))
+    mydata.general <- mydata.16 %>%
+      select(alien.cynicism, elect.attn, rep, dem, ideo7, income.q,
+             party.strength, educ, white, female, age, votechoice16) %>%
+      drop_na()
     set.seed(219)
-    general.mod <- multinom(votechoice16 ~ alien.cynicism + elect.attn  + pid3 + ideo7 + income.q + party.strength +
-                                educ + white + female + age, data = mydata.16)
+    mydata.general$votechoice16 <- relevel(mydata.general$votechoice16, ref = "Did not vote")
+    general.mod <- multinom(votechoice16 ~ alien.cynicism + elect.attn  + rep + dem + ideo7 + income.q + party.strength +
+                                educ + white + female + age, data = mydata.general, Hess = T)
     general.t <- summary(general.mod)$coefficients/summary(general.mod)$standard.errors # t values
     general.p <- ifelse(general.t < 0, pt(general.t,general.mod$edf,lower=T), pt(general.t,general.mod$edf,lower=F)) # one-tailed p-values
     stargazer(general.mod, digits = 3,
@@ -356,72 +573,323 @@
               keep.stat = c("aic"))
     dim(general.mod$fitted.values) # N = 2,996, N not produced by multinom
     
-    # Plot
-    general.effect.cynicism <- effect("alien.cynicism", general.mod, xlevels = list(alien.cynicism = seq(0,2,0.1)), typical = median)
-    general.effect.unresp <- effect("elect.attn", general.mod, xlevels = list(elect.attn = seq(0,2,0.1)), typical = median)
-    general.effect.df <- data.frame(fit = c(general.effect.cynicism$prob[,1], general.effect.cynicism$prob[,2],
-                                             general.effect.cynicism$prob[,3], general.effect.cynicism$prob[,4],
-                                             general.effect.unresp$prob[,1], general.effect.unresp$prob[,2],
-                                             general.effect.unresp$prob[,3], general.effect.unresp$prob[,4]),
-                                     lwr = c(general.effect.cynicism$lower.prob[,1], general.effect.cynicism$lower.prob[,2],
-                                             general.effect.cynicism$lower.prob[,3], general.effect.cynicism$lower.prob[,4],
-                                             general.effect.unresp$lower.prob[,1], general.effect.unresp$lower.prob[,2],
-                                             general.effect.unresp$lower.prob[,3], general.effect.unresp$lower.prob[,4]),
-                                     upr = c(general.effect.cynicism$upper.prob[,1], general.effect.cynicism$upper.prob[,2],
-                                             general.effect.cynicism$upper.prob[,3], general.effect.cynicism$upper.prob[,4],
-                                             general.effect.unresp$upper.prob[,1], general.effect.unresp$upper.prob[,2],
-                                             general.effect.unresp$upper.prob[,3], general.effect.unresp$upper.prob[,4]),
-                                     choice = c(rep("Clinton", 21), rep("Trump", 21),
-                                                rep("Other", 21), rep("Did not vote", 21),
-                                                rep("Clinton", 21), rep("Trump", 21),
-                                                rep("Other", 21), rep("Did not vote", 21)),
-                                     x = rep(seq(0,2,0.1),8),
-                                     dimension = c(rep("Cynicism", 84), rep("Gov. Unresponsiveness", 84)))
-    general.effect.df$choice <- factor(general.effect.df$choice, levels = c("Clinton","Trump","Other","Did not vote"))
+      # Simulating Predicted Probabilities ----
+      x <- seq(0,2,0.01)
+      general.coef <- coef(general.mod)
+      general.covar <- vcov(general.mod)
+      set.seed(219)
+      clintonCoef <- mvrnorm(n = 1000, general.coef[1,], general.covar[1:12,1:12]) # simulate 1000 coefficients
+      trumpCoef <- mvrnorm(n = 1000, general.coef[2,], general.covar[13:24,13:24]) # simulate 1000 coefficients
+      otherCoef <- mvrnorm(n = 1000, general.coef[3,], general.covar[25:36,25:36]) # simulate 1000 coefficients
+      
+      # Cynicism ----
+      temp <- matrix(NA, nrow = 1000, ncol = 4)
+      sim.results <- matrix(NA, nrow = 804, ncol = 4)
+      general.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 8)
+      
+      for(i in 1:length(x)){
+        
+        #clintonCoef <- mvrnorm(n = 1000, general.coef[1,], general.covar[1:12,1:12]) # simulate 1000 coefficients
+        #trumpCoef <- mvrnorm(n = 1000, general.coef[2,], general.covar[13:24,13:24]) # simulate 1000 coefficients
+        #otherCoef <- mvrnorm(n = 1000, general.coef[3,], general.covar[25:36,25:36]) # simulate 1000 coefficients
+        
+        for(j in 1:nrow(clintonCoef)){
+          clintonAg <- exp(clintonCoef[j,1] + # clinton aggregator function
+                             clintonCoef[j,2]*x[i] +
+                             clintonCoef[j,3]*mydata.general$elect.attn +
+                             clintonCoef[j,4]*mydata.general$rep +
+                             clintonCoef[j,5]*mydata.general$dem +
+                             clintonCoef[j,6]*mydata.general$ideo7 +
+                             clintonCoef[j,7]*mydata.general$income.q +
+                             clintonCoef[j,8]*mydata.general$party.strength +
+                             clintonCoef[j,9]*mydata.general$educ + 
+                             clintonCoef[j,10]*mydata.general$white +
+                             clintonCoef[j,11]*mydata.general$female +
+                             clintonCoef[j,12]*mydata.general$age)
+          
+          trumpAg <- exp(trumpCoef[j,1] + # trump aggregator function
+                           trumpCoef[j,2]*x[i] +
+                           trumpCoef[j,3]*mydata.general$elect.attn +
+                           trumpCoef[j,4]*mydata.general$rep +
+                           trumpCoef[j,5]*mydata.general$dem +
+                           trumpCoef[j,6]*mydata.general$ideo7 +
+                           trumpCoef[j,7]*mydata.general$income.q +
+                           trumpCoef[j,8]*mydata.general$party.strength +
+                           trumpCoef[j,9]*mydata.general$educ + 
+                           trumpCoef[j,10]*mydata.general$white +
+                           trumpCoef[j,11]*mydata.general$female +
+                           trumpCoef[j,12]*mydata.general$age)
+          
+          otherAg <- exp(otherCoef[j,1] + # other aggregator function
+                            otherCoef[j,2]*x[i] +
+                            otherCoef[j,3]*mydata.general$elect.attn +
+                            otherCoef[j,4]*mydata.general$rep +
+                            otherCoef[j,5]*mydata.general$dem +
+                            otherCoef[j,6]*mydata.general$ideo7 +
+                            otherCoef[j,7]*mydata.general$income.q +
+                            otherCoef[j,8]*mydata.general$party.strength +
+                            otherCoef[j,9]*mydata.general$educ + 
+                            otherCoef[j,10]*mydata.general$white +
+                            otherCoef[j,11]*mydata.general$female +
+                            otherCoef[j,12]*mydata.general$age)
+          
+          clinton <- clintonAg / (1 + clintonAg + trumpAg + otherAg) # get probabilities
+          trump <- trumpAg / (1 + clintonAg + trumpAg + otherAg)
+          other <- otherAg / (1 + clintonAg + trumpAg + otherAg)
+          novote <- 1 - clinton - trump - other
+          
+          temp[j,1] <- mean(clinton) # take mean predicted probability of clinton vote across all observable values, store in j-th row, 1st column
+          temp[j,2] <- mean(trump)
+          temp[j,3] <- mean(other)
+          temp[j,4] <- mean(novote)
+          
+      }
+      
+        sim.results[((i*4)-3),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-3),2] <- quantile(temp[,1], 0.5) 
+        sim.results[((i*4)-3),2] <- mean(temp[,1]) # mean of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        sim.results[((i*4)-3),3] <- quantile(temp[,1], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        sim.results[((i*4)-3),4] <- quantile(temp[,1], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        
+        sim.results[((i*4)-2),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-2),2] <- quantile(temp[,2], 0.5) 
+        sim.results[((i*4)-2),2] <- mean(temp[,2]) # mean of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),3] <- quantile(temp[,2], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),4] <- quantile(temp[,2], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        
+        sim.results[((i*4)-1),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-1),2] <- quantile(temp[,3], 0.5) 
+        sim.results[((i*4)-1),2] <- mean(temp[,3]) # mean of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),3] <- quantile(temp[,3], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),4] <- quantile(temp[,3], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        
+        sim.results[((i*4)),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)),2] <- quantile(temp[,4], 0.5) 
+        sim.results[((i*4)),2] <- mean(temp[,4]) # mean of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),3] <- quantile(temp[,4], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),4] <- quantile(temp[,4], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        
+        if (x[i] == 0) { # min
+          general.probdists.cynicism[,1] <- temp[,1]
+          general.probdists.cynicism[,2] <- temp[,2]
+          general.probdists.cynicism[,3] <- temp[,3]
+          general.probdists.cynicism[,4] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          general.probdists.cynicism[,5] <- temp[,1]
+          general.probdists.cynicism[,6] <- temp[,2]
+          general.probdists.cynicism[,7] <- temp[,3]
+          general.probdists.cynicism[,8] <- temp[,4]
+        } 
+        
+      }
+      
+      general.effect.cynicism <- as.data.frame(sim.results) # put results in data frame
+      colnames(general.effect.cynicism)[1] <- "x"
+      colnames(general.effect.cynicism)[2] <- "fit"
+      colnames(general.effect.cynicism)[3] <- "lower"
+      colnames(general.effect.cynicism)[4] <- "upper"
+      general.effect.cynicism$votechoice16 <- rep(c("Clinton","Trump","Other","Did not vote"),201)
+      general.effect.cynicism$category <- "Cynicism"
+      
+      # Election Unresponsiveness ----
+      temp <- matrix(NA, nrow = 1000, ncol = 4) # create empty matrices for results
+      sim.results <- matrix(NA, nrow = 804, ncol = 4)
+      general.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 8)
+      
+      for(i in 1:length(x)){
+        
+        #clintonCoef <- mvrnorm(n = 1000, general.coef[1,], general.covar[1:12,1:12]) # simulate 1000 coefficients
+        #trumpCoef <- mvrnorm(n = 1000, general.coef[2,], general.covar[13:24,13:24]) # simulate 1000 coefficients
+        #otherCoef <- mvrnorm(n = 1000, general.coef[3,], general.covar[25:36,25:36]) # simulate 1000 coefficients
+        
+        for(j in 1:nrow(clintonCoef)){
+          clintonAg <- exp(clintonCoef[j,1] + # clinton aggregator function
+                             clintonCoef[j,2]*mydata.general$alien.cynicism +
+                             clintonCoef[j,3]*x[i] +
+                             clintonCoef[j,4]*mydata.general$rep +
+                             clintonCoef[j,5]*mydata.general$dem +
+                             clintonCoef[j,6]*mydata.general$ideo7 +
+                             clintonCoef[j,7]*mydata.general$income.q +
+                             clintonCoef[j,8]*mydata.general$party.strength +
+                             clintonCoef[j,9]*mydata.general$educ + 
+                             clintonCoef[j,10]*mydata.general$white +
+                             clintonCoef[j,11]*mydata.general$female +
+                             clintonCoef[j,12]*mydata.general$age)
+          
+          trumpAg <- exp(trumpCoef[j,1] + # trump aggregator function
+                           trumpCoef[j,2]*mydata.general$alien.cynicism +
+                           trumpCoef[j,3]*x[i] +
+                           trumpCoef[j,4]*mydata.general$rep +
+                           trumpCoef[j,5]*mydata.general$dem +
+                           trumpCoef[j,6]*mydata.general$ideo7 +
+                           trumpCoef[j,7]*mydata.general$income.q +
+                           trumpCoef[j,8]*mydata.general$party.strength +
+                           trumpCoef[j,9]*mydata.general$educ + 
+                           trumpCoef[j,10]*mydata.general$white +
+                           trumpCoef[j,11]*mydata.general$female +
+                           trumpCoef[j,12]*mydata.general$age)
+          
+          otherAg <- exp(otherCoef[j,1] + # other aggregator function
+                            otherCoef[j,2]*mydata.general$alien.cynicism +
+                            otherCoef[j,3]*x[i] +
+                            otherCoef[j,4]*mydata.general$rep +
+                            otherCoef[j,5]*mydata.general$dem +
+                            otherCoef[j,6]*mydata.general$ideo7 +
+                            otherCoef[j,7]*mydata.general$income.q +
+                            otherCoef[j,8]*mydata.general$party.strength +
+                            otherCoef[j,9]*mydata.general$educ + 
+                            otherCoef[j,10]*mydata.general$white +
+                            otherCoef[j,11]*mydata.general$female +
+                            otherCoef[j,12]*mydata.general$age)
+          
+          clinton <- clintonAg / (1 + clintonAg + trumpAg + otherAg) # get probabilities
+          trump <- trumpAg / (1 + clintonAg + trumpAg + otherAg)
+          other <- otherAg / (1 + clintonAg + trumpAg + otherAg)
+          novote <- 1 - clinton - trump - other
+          
+          temp[j,1] <- mean(clinton) # take mean predicted probability of clinton vote across all observable values, store in j-th row, 1st column
+          temp[j,2] <- mean(trump)
+          temp[j,3] <- mean(other)
+          temp[j,4] <- mean(novote)
+        }
+        
+        sim.results[((i*4)-3),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-3),2] <- quantile(temp[,1], 0.5) 
+        sim.results[((i*4)-3),2] <- mean(temp[,1]) # mean of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        sim.results[((i*4)-3),3] <- quantile(temp[,1], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        sim.results[((i*4)-3),4] <- quantile(temp[,1], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Clinton)
+        
+        sim.results[((i*4)-2),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-2),2] <- quantile(temp[,2], 0.5) 
+        sim.results[((i*4)-2),2] <- mean(temp[,2]) # mean of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),3] <- quantile(temp[,2], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        sim.results[((i*4)-2),4] <- quantile(temp[,2], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Trump)
+        
+        sim.results[((i*4)-1),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)-1),2] <- quantile(temp[,3], 0.5) 
+        sim.results[((i*4)-1),2] <- mean(temp[,3]) # mean of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),3] <- quantile(temp[,3], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        sim.results[((i*4)-1),4] <- quantile(temp[,3], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Other)
+        
+        sim.results[((i*4)),1] <- x[i] # capture 'x' value
+        #sim.results[((i*4)),2] <- quantile(temp[,4], 0.5) 
+        sim.results[((i*4)),2] <- mean(temp[,4]) # mean of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),3] <- quantile(temp[,4], 0.05) # lower-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        sim.results[((i*4)),4] <- quantile(temp[,4], 0.95) # right-tail of distribution of 1,000 observed-value predicted probabilities (Did not vote)
+        
+        if (x[i] == 0) { # min
+          general.probdists.unresp[,1] <- temp[,1]
+          general.probdists.unresp[,2] <- temp[,2]
+          general.probdists.unresp[,3] <- temp[,3]
+          general.probdists.unresp[,4] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          general.probdists.unresp[,5] <- temp[,1]
+          general.probdists.unresp[,6] <- temp[,2]
+          general.probdists.unresp[,7] <- temp[,3]
+          general.probdists.unresp[,8] <- temp[,4]
+        } 
+        
+      }
+      
+      general.effect.unresp <- as.data.frame(sim.results) # put results in data frame
+      colnames(general.effect.unresp)[1] <- "x"
+      colnames(general.effect.unresp)[2] <- "fit"
+      colnames(general.effect.unresp)[3] <- "lower"
+      colnames(general.effect.unresp)[4] <- "upper"
+      general.effect.unresp$votechoice16 <- rep(c("Clinton","Trump","Other", "Did not vote"),201)
+      general.effect.unresp$category <- "Election Unresp."
+      
+      # Combine results and plot ----
+      general.effects <- rbind(general.effect.cynicism, general.effect.unresp)
+      general.effects$votechoice16 <- factor(general.effects$votechoice16, levels = c("Clinton","Trump","Other", "Did not vote"))
+      
+      pdf(height = 12, width = 12, "Figures/Probs-General.pdf")
+      ggplot(general.effects, aes(x = x, y = fit, colour = votechoice16)) +
+        geom_line(size = 2) +
+        geom_line(aes(y = lower), lty = "dashed") +
+        geom_line(aes(y = upper), lty = "dashed") +
+        labs(x = "", y = "Probability of Vote Choice") +
+        facet_grid(rows = vars(votechoice16), cols = vars(category), scales = "free_y") +
+        scale_colour_manual("", values = c("#377EB8","#E41A1C","#4DAF4A","#984EA3")) +
+        scale_x_continuous(breaks = c(0,1,2)) +
+        theme(axis.line = element_line(colour = "black"),
+              plot.subtitle = element_text(vjust = 1), 
+              plot.caption = element_text(vjust = 1), 
+              plot.margin = margin(0.5,3,0.5,0.5,"cm"),
+              legend.text = element_text(size = 18),
+              legend.position = "bottom",
+              panel.background = element_rect(fill = "white", colour = "black", size = 1),
+              panel.grid.major = element_line(linetype = "blank"), 
+              panel.grid.minor = element_line(linetype = "blank"),
+              axis.title = element_text(size = 22),
+              axis.text = element_text(size = 18),
+              strip.text = element_text(size = 18))
+      dev.off()
+      
+      
+      # Differences in Predicted Probabilities ----
+      general.probdists.cynicism <- as.data.frame(general.probdists.cynicism)
+      general.probdists.unresp <- as.data.frame(general.probdists.unresp)
+      colnames(general.probdists.cynicism) <- c("clinton.lo","trump.lo","other.lo","dnv.lo",
+                                                "clinton.hi","trump.hi","other.hi","dnv.hi")
+      colnames(general.probdists.unresp) <- c("clinton.lo","trump.lo","other.lo","dnv.lo",
+                                              "clinton.hi","trump.hi","other.hi","dnv.hi")
+      
+      t.test(general.probdists.cynicism$clinton.hi, general.probdists.cynicism$clinton.lo)
+      t.test(general.probdists.cynicism$trump.hi, general.probdists.cynicism$trump.lo)
+      t.test(general.probdists.cynicism$other.hi, general.probdists.cynicism$other.lo)
+      t.test(general.probdists.cynicism$dnv.hi, general.probdists.cynicism$dnv.lo)
+      
+      t.test(general.probdists.unresp$clinton.hi, general.probdists.unresp$clinton.lo)
+      t.test(general.probdists.unresp$trump.hi, general.probdists.unresp$trump.lo)
+      t.test(general.probdists.unresp$other.hi, general.probdists.unresp$other.lo)
+      t.test(general.probdists.unresp$dnv.hi, general.probdists.unresp$dnv.lo)
+      
+      
+      
+      
+      
+      
+      
+    # Plot ----
+    general.effect.cynicism <- mnl_pred_ova(model = general.mod, 
+                                            data = mydata.16,
+                                            xvari = "alien.cynicism",
+                                            by = 0.01,
+                                            seed = 219,
+                                            nsim = 10,
+                                            probs = c(0.025, 0.975))
+    general.effect.cynicism.backup <- general.effect.cynicism
     
-    # Clinton
-    se.clinton.l <- general.effect.cynicism$se.prob[1,1]
-    se.clinton.h <- general.effect.cynicism$se.prob[21,1]
-    est.clinton.l <- general.effect.cynicism$prob[1,1]
-    est.clinton.h <- general.effect.cynicism$prob[21,1]
-    t.clinton.gen <- (est.clinton.h - est.clinton.l)/(sqrt(se.clinton.h^2 + se.clinton.l^2))
-    p.clinton.gen <- 2*pnorm(-abs(t.clinton.gen))
+    general.effect.unresp <- mnl_pred_ova(model = general.mod, 
+                                          data = mydata.16,
+                                          xvari = "elect.attn",
+                                          by = 1, 
+                                          seed = 219,
+                                          nsim = 500,
+                                          probs = c(0.025, 0.975))
+    general.effect.unresp.backup <- general.effect.unresp
     
-    # Trump
-    se.trump.l <- general.effect.cynicism$se.prob[1,2]
-    se.trump.h <- general.effect.cynicism$se.prob[21,2]
-    est.trump.l <- general.effect.cynicism$prob[1,2]
-    est.trump.h <- general.effect.cynicism$prob[21,2]
-    t.trump.gen <- (est.trump.h - est.trump.l)/(sqrt(se.trump.h^2 + se.trump.l^2))
-    p.trump.gen <- 2*pnorm(-abs(t.trump.gen))
+    general.effect.cynicism <- general.effect.cynicism$plotdata
+    general.effect.unresp <- general.effect.unresp$plotdata
+    colnames(general.effect.cynicism)[1] <- "x"
+    colnames(general.effect.unresp)[1] <- "x"
+    general.effect.cynicism$category <- "Cynicism"
+    general.effect.unresp$category <- "Election Unresp."
     
-    # Trump
-    se.other.l <- general.effect.cynicism$se.prob[1,3]
-    se.other.h <- general.effect.cynicism$se.prob[21,3]
-    est.other.l <- general.effect.cynicism$prob[1,3]
-    est.other.h <- general.effect.cynicism$prob[21,3]
-    t.other.gen <- (est.other.h - est.other.l)/(sqrt(se.other.h^2 + se.other.l^2))
-    p.other.gen <- 2*pnorm(-abs(t.other.gen))
-    
-    # Did not vote
-    se.dnv.l <- general.effect.cynicism$se.prob[1,4]
-    se.dnv.h <- general.effect.cynicism$se.prob[21,4]
-    est.dnv.l <- general.effect.cynicism$prob[1,4]
-    est.dnv.h <- general.effect.cynicism$prob[21,4]
-    t.dnv.gen <- (est.dnv.h - est.dnv.l)/(sqrt(se.dnv.h^2 + se.dnv.l^2))
-    p.dnv.gen <- 2*pnorm(-abs(t.dnv.gen))
-
-
-
-
+    general.effect.df<- rbind(general.effect.cynicism, general.effect.unresp)
     
     pdf(height = 12, width = 12, "Figures/Probs-General.pdf")
-    ggplot(general.effect.df, aes(x = x, y = fit, colour = choice)) +
+    ggplot(general.effect.df, aes(x = x, y = mean, colour = votechoice16)) +
       geom_line(size = 2) +
-      geom_line(aes(y = lwr), lty = "dashed") +
-      geom_line(aes(y = upr), lty = "dashed") +
+      geom_line(aes(y = lower), lty = "dashed") +
+      geom_line(aes(y = upper), lty = "dashed") +
       labs(x = "", y = "Probability of Vote Choice") +
-      facet_grid(rows = vars(choice), cols = vars(dimension), scales = "free_y") +
+      facet_grid(rows = vars(votechoice16), cols = vars(category), scales = "free_y") +
       scale_colour_manual("", values = c("#377EB8","#E41A1C","#4DAF4A","#984EA3")) +
       scale_x_continuous(breaks = c(0,1,2)) +
       theme(axis.line = element_line(colour = "black"),
@@ -437,7 +905,11 @@
             axis.text = element_text(size = 18),
             strip.text = element_text(size = 18))
     dev.off()
-
+    
+    general.effect.df[1,3]
+    t.sanders <- (est.sanders.h - est.sanders.l)/(sqrt(se.sanders.h^2 + se.sanders.l^2))
+    p.sanders <- 2*pnorm(-abs(t.sanders))
+    
   # Vote Preference ----
     # Preference in General Election (Multinomial Logit) ----
     mydata.16$votepref16 <- factor(mydata.16$votepref16, levels = c("Clinton", "Trump", "Other/Third-Party")) # change order of outcomes
