@@ -210,10 +210,10 @@
                                                    sqrt(diag(vcov(turnout.96)))[3], sqrt(diag(vcov(turnout.00)))[3],
                                                    sqrt(diag(vcov(turnout.04)))[3], sqrt(diag(vcov(turnout.08)))[3],
                                                    sqrt(diag(vcov(turnout.12)))[3], sqrt(diag(vcov(turnout.16)))[3]))
-    turnout.est$cyn.lwr <- turnout.est$cyn.est - 2*turnout.est$cyn.std.error
-    turnout.est$cyn.upr <- turnout.est$cyn.est + 2*turnout.est$cyn.std.error
-    turnout.est$unresp.lwr <- turnout.est$unresp.est - 2*turnout.est$unresp.std.error
-    turnout.est$unresp.upr <- turnout.est$unresp.est + 2*turnout.est$unresp.std.error
+    turnout.est$cyn.lwr <- turnout.est$cyn.est - 1.645*turnout.est$cyn.std.error
+    turnout.est$cyn.upr <- turnout.est$cyn.est + 1.645*turnout.est$cyn.std.error
+    turnout.est$unresp.lwr <- turnout.est$unresp.est - 1.645*turnout.est$unresp.std.error
+    turnout.est$unresp.upr <- turnout.est$unresp.est + 1.645*turnout.est$unresp.std.error
     turnout.est$year <- seq(1988,2016,4)
     
     pdf(height= 6, width = 12, "Figures/Coef-Turnout-Cynicism.pdf")
@@ -232,8 +232,8 @@
             panel.background = element_rect(fill = "white", colour = NA),
             panel.grid.major = element_line(linetype = "blank"), 
             panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 24),
-            axis.text = element_text(size = 22))
+            axis.title = element_text(size = 28),
+            axis.text = element_text(size = 26))
     dev.off()
     
     
@@ -253,28 +253,28 @@
             panel.background = element_rect(fill = "white", colour = NA),
             panel.grid.major = element_line(linetype = "blank"), 
             panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 26),
-            axis.text = element_text(size = 24))
+            axis.title = element_text(size = 28),
+            axis.text = element_text(size = 26))
     dev.off()  
       
   # Vote Choice ----
     # Primary Election Vote Model (Multinomial Logit) ----
     mydata.16$voteprimarychoice16 <- factor(mydata.16$voteprimarychoice16, levels = c("Sanders", "Trump", "Other", "Did not vote"))
     mydata.primary <- mydata.16 %>% # create data frame for primary models
-      select(alien.cynicism, elect.attn, rep, dem, ideo7, income.q,
-             party.strength, educ, white, female, age, voteprimarychoice16, sup.tues) %>%
+      select(alien.cynicism, elect.attn, rep, ind, dem, ideo7, income.q,
+             party.strength, educ, white, female, age, voteprimarychoice16, sup.tues, pid3) %>%
       filter(sup.tues == 1) %>%
       drop_na()
     set.seed(219) # seed
     mydata.primary$voteprimarychoice16 <- relevel(mydata.primary$voteprimarychoice16, ref = "Did not vote")
-    primary.mod <- multinom(voteprimarychoice16 ~ alien.cynicism + elect.attn  + rep + dem + ideo7 + income.q + party.strength + # multinomial logit
+    primary.mod <- multinom(voteprimarychoice16 ~ alien.cynicism + elect.attn  + rep + ind + ideo7 + income.q + party.strength + # multinomial logit
                               educ + white + female + age, data = mydata.primary, Hess = T)
     primary.t <- summary(primary.mod)$coefficients/summary(primary.mod)$standard.errors # t values
     primary.p <- ifelse(primary.t < 0, pt(primary.t,primary.mod$edf,lower=T), pt(primary.t,primary.mod$edf,lower=F)) # one-tailed p-values
     stargazer(primary.mod, digits = 3, # create LaTeX table
               dep.var.labels.include = T,
-              covariate.labels = c("Cynicism", "Unresponsive to Elec.", "Independent",
-                                   "Republican", "Ideology", "Income", "Partisan Strength",
+              covariate.labels = c("Cynicism", "Unresponsive to Elec.", "Republican",
+                                   "Independent", "Ideology", "Income", "Partisan Strength",
                                    "Education", "White", "Female", "Age", "Constant"),
               keep.stat = c("aic"))
     dim(primary.mod$fitted.values) # N = 602, stargazer doesn't produce N from multinom,
@@ -291,7 +291,7 @@
       # Cynicism ----
       temp <- matrix(NA, nrow = 1000, ncol = 4)
       sim.results <- matrix(NA, nrow = 804, ncol = 4)
-      primary.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 8)
+      primary.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 12)
 
       for(i in 1:length(x)){
         
@@ -304,7 +304,7 @@
                              sandersCoef[j,2]*x[i] +
                              sandersCoef[j,3]*mydata.primary$elect.attn +
                              sandersCoef[j,4]*mydata.primary$rep +
-                             sandersCoef[j,5]*mydata.primary$dem +
+                             sandersCoef[j,5]*mydata.primary$ind +
                              sandersCoef[j,6]*mydata.primary$ideo7 +
                              sandersCoef[j,7]*mydata.primary$income.q +
                              sandersCoef[j,8]*mydata.primary$party.strength +
@@ -317,7 +317,7 @@
                            trumpCoef[j,2]*x[i] +
                            trumpCoef[j,3]*mydata.primary$elect.attn +
                            trumpCoef[j,4]*mydata.primary$rep +
-                           trumpCoef[j,5]*mydata.primary$dem +
+                           trumpCoef[j,5]*mydata.primary$ind +
                            trumpCoef[j,6]*mydata.primary$ideo7 +
                            trumpCoef[j,7]*mydata.primary$income.q +
                            trumpCoef[j,8]*mydata.primary$party.strength +
@@ -330,7 +330,7 @@
                             otherCoef[j,2]*x[i] +
                             otherCoef[j,3]*mydata.primary$elect.attn +
                             otherCoef[j,4]*mydata.primary$rep +
-                            otherCoef[j,5]*mydata.primary$dem +
+                            otherCoef[j,5]*mydata.primary$ind +
                             otherCoef[j,6]*mydata.primary$ideo7 +
                             otherCoef[j,7]*mydata.primary$income.q +
                             otherCoef[j,8]*mydata.primary$party.strength +
@@ -381,11 +381,18 @@
           primary.probdists.cynicism[,4] <- temp[,4]
         }
         
-        if (x[i] == 2) { # max
+        if (x[i] == 1) { # med
           primary.probdists.cynicism[,5] <- temp[,1]
           primary.probdists.cynicism[,6] <- temp[,2]
           primary.probdists.cynicism[,7] <- temp[,3]
           primary.probdists.cynicism[,8] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          primary.probdists.cynicism[,9] <- temp[,1]
+          primary.probdists.cynicism[,10] <- temp[,2]
+          primary.probdists.cynicism[,11] <- temp[,3]
+          primary.probdists.cynicism[,12] <- temp[,4]
         } 
         
       }
@@ -401,7 +408,7 @@
       # Election Unresponsiveness ----
       temp <- matrix(NA, nrow = 1000, ncol = 4) # create empty matrices for results
       sim.results <- matrix(NA, nrow = 804, ncol = 4)
-      primary.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 8)
+      primary.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 12)
       
       for(i in 1:length(x)){
         
@@ -414,7 +421,7 @@
                              sandersCoef[j,2]*mydata.primary$alien.cynicism +
                              sandersCoef[j,3]*x[i] +
                              sandersCoef[j,4]*mydata.primary$rep +
-                             sandersCoef[j,5]*mydata.primary$dem +
+                             sandersCoef[j,5]*mydata.primary$ind +
                              sandersCoef[j,6]*mydata.primary$ideo7 +
                              sandersCoef[j,7]*mydata.primary$income.q +
                              sandersCoef[j,8]*mydata.primary$party.strength +
@@ -427,7 +434,7 @@
                            trumpCoef[j,2]*mydata.primary$alien.cynicism +
                            trumpCoef[j,3]*x[i] +
                            trumpCoef[j,4]*mydata.primary$rep +
-                           trumpCoef[j,5]*mydata.primary$dem +
+                           trumpCoef[j,5]*mydata.primary$ind +
                            trumpCoef[j,6]*mydata.primary$ideo7 +
                            trumpCoef[j,7]*mydata.primary$income.q +
                            trumpCoef[j,8]*mydata.primary$party.strength +
@@ -440,7 +447,7 @@
                             otherCoef[j,2]*mydata.primary$alien.cynicism +
                             otherCoef[j,3]*x[i] +
                             otherCoef[j,4]*mydata.primary$rep +
-                            otherCoef[j,5]*mydata.primary$dem +
+                            otherCoef[j,5]*mydata.primary$ind +
                             otherCoef[j,6]*mydata.primary$ideo7 +
                             otherCoef[j,7]*mydata.primary$income.q +
                             otherCoef[j,8]*mydata.primary$party.strength +
@@ -491,12 +498,20 @@
           primary.probdists.unresp[,4] <- temp[,4]
         }
         
-        if (x[i] == 2) { # max
+        if (x[i] == 1) { # med
           primary.probdists.unresp[,5] <- temp[,1]
           primary.probdists.unresp[,6] <- temp[,2]
           primary.probdists.unresp[,7] <- temp[,3]
           primary.probdists.unresp[,8] <- temp[,4]
+        }
+        
+        if (x[i] == 2) { # max
+          primary.probdists.unresp[,9] <- temp[,1]
+          primary.probdists.unresp[,10] <- temp[,2]
+          primary.probdists.unresp[,11] <- temp[,3]
+          primary.probdists.unresp[,12] <- temp[,4]
         } 
+        
       }
       
       primary.effect.unresp <- as.data.frame(sim.results) # put results in data frame
@@ -538,29 +553,33 @@
       primary.probdists.cynicism <- as.data.frame(primary.probdists.cynicism)
       primary.probdists.unresp <- as.data.frame(primary.probdists.unresp)
       colnames(primary.probdists.cynicism) <- c("sanders.lo","trump.lo","other.lo","dnv.lo",
+                                                "sanders.mid","trump.mid","other.mid","dnv.mid",
                                                 "sanders.hi","trump.hi","other.hi","dnv.hi")
       colnames(primary.probdists.unresp) <- c("sanders.lo","trump.lo","other.lo","dnv.lo",
+                                              "sanders.mid","trump.mid","other.mid","dnv.mid",
                                               "sanders.hi","trump.hi","other.hi","dnv.hi")
 
-      t.test(primary.probdists.cynicism$sanders.hi, primary.probdists.cynicism$sanders.lo)
-      t.test(primary.probdists.cynicism$trump.hi, primary.probdists.cynicism$trump.lo)
-      t.test(primary.probdists.cynicism$other.hi, primary.probdists.cynicism$other.lo)
-      t.test(primary.probdists.cynicism$dnv.hi, primary.probdists.cynicism$dnv.lo)
-
-      t.test(primary.probdists.unresp$sanders.hi, primary.probdists.unresp$sanders.lo)
-      t.test(primary.probdists.unresp$trump.hi, primary.probdists.unresp$trump.lo)
-      t.test(primary.probdists.unresp$other.hi, primary.probdists.unresp$other.lo)
-      t.test(primary.probdists.unresp$dnv.hi, primary.probdists.unresp$dnv.lo)
+      # Cynicism
+      round(quantile(primary.probdists.cynicism$sanders.hi - primary.probdists.cynicism$sanders.lo, c(0.05, 0.5, 0.95)),3) # 0.078, [0.038, 0.115]*
+      round(quantile(primary.probdists.cynicism$trump.hi - primary.probdists.cynicism$trump.lo, c(0.05, 0.5, 0.95)),3)  # 0.085, [0.013, 0.131]*
+      round(quantile(primary.probdists.cynicism$other.hi - primary.probdists.cynicism$other.lo, c(0.05, 0.5, 0.95)),3)  # -0.049, [-0.149, 0.049]
+      round(quantile(primary.probdists.cynicism$dnv.hi - primary.probdists.cynicism$dnv.lo, c(0.05, 0.5, 0.95)),3) # -0.107, [-0.190, -0.022]*
+      
+      # Election Unresponsiveness
+      round(quantile(primary.probdists.unresp$sanders.hi - primary.probdists.unresp$sanders.lo, c(0.05, 0.5, 0.95)),3) # -0.027, [-0.075, 0.014]
+      round(quantile(primary.probdists.unresp$trump.hi - primary.probdists.unresp$trump.lo, c(0.05, 0.5, 0.95)),3) # 0.007, [-0.058, 0.071]
+      round(quantile(primary.probdists.unresp$other.hi - primary.probdists.unresp$other.lo, c(0.05, 0.5, 0.95)),3) # -0.004, [-0.089, 0.089]
+      round(quantile(primary.probdists.unresp$dnv.hi - primary.probdists.unresp$dnv.lo, c(0.05, 0.5, 0.95)),3) # 0.023, [-0.049, 0.099]
       
     # General Election Vote Model (Multinomial Logit) ----
     mydata.16$votechoice16 <- factor(mydata.16$votechoice16, levels = c("Clinton","Trump","Other","Did not vote"))
     mydata.general <- mydata.16 %>%
-      select(alien.cynicism, elect.attn, rep, dem, ideo7, income.q,
+      select(alien.cynicism, elect.attn, rep, dem, ind, ideo7, income.q,
              party.strength, educ, white, female, age, votechoice16) %>%
       drop_na()
     set.seed(219)
     mydata.general$votechoice16 <- relevel(mydata.general$votechoice16, ref = "Did not vote")
-    general.mod <- multinom(votechoice16 ~ alien.cynicism + elect.attn  + rep + dem + ideo7 + income.q + party.strength +
+    general.mod <- multinom(votechoice16 ~ alien.cynicism + elect.attn  + rep + ind + ideo7 + income.q + party.strength +
                                 educ + white + female + age, data = mydata.general, Hess = T)
     general.t <- summary(general.mod)$coefficients/summary(general.mod)$standard.errors # t values
     general.p <- ifelse(general.t < 0, pt(general.t,general.mod$edf,lower=T), pt(general.t,general.mod$edf,lower=F)) # one-tailed p-values
@@ -585,7 +604,7 @@
       # Cynicism ----
       temp <- matrix(NA, nrow = 1000, ncol = 4)
       sim.results <- matrix(NA, nrow = 804, ncol = 4)
-      general.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 8)
+      general.probdists.cynicism <- matrix(NA, nrow = 1000, ncol = 12)
       
       for(i in 1:length(x)){
         
@@ -598,7 +617,7 @@
                              clintonCoef[j,2]*x[i] +
                              clintonCoef[j,3]*mydata.general$elect.attn +
                              clintonCoef[j,4]*mydata.general$rep +
-                             clintonCoef[j,5]*mydata.general$dem +
+                             clintonCoef[j,5]*mydata.general$ind +
                              clintonCoef[j,6]*mydata.general$ideo7 +
                              clintonCoef[j,7]*mydata.general$income.q +
                              clintonCoef[j,8]*mydata.general$party.strength +
@@ -611,7 +630,7 @@
                            trumpCoef[j,2]*x[i] +
                            trumpCoef[j,3]*mydata.general$elect.attn +
                            trumpCoef[j,4]*mydata.general$rep +
-                           trumpCoef[j,5]*mydata.general$dem +
+                           trumpCoef[j,5]*mydata.general$ind +
                            trumpCoef[j,6]*mydata.general$ideo7 +
                            trumpCoef[j,7]*mydata.general$income.q +
                            trumpCoef[j,8]*mydata.general$party.strength +
@@ -624,7 +643,7 @@
                             otherCoef[j,2]*x[i] +
                             otherCoef[j,3]*mydata.general$elect.attn +
                             otherCoef[j,4]*mydata.general$rep +
-                            otherCoef[j,5]*mydata.general$dem +
+                            otherCoef[j,5]*mydata.general$ind +
                             otherCoef[j,6]*mydata.general$ideo7 +
                             otherCoef[j,7]*mydata.general$income.q +
                             otherCoef[j,8]*mydata.general$party.strength +
@@ -676,11 +695,18 @@
           general.probdists.cynicism[,4] <- temp[,4]
         }
         
-        if (x[i] == 2) { # max
+        if (x[i] == 1) { # med
           general.probdists.cynicism[,5] <- temp[,1]
           general.probdists.cynicism[,6] <- temp[,2]
           general.probdists.cynicism[,7] <- temp[,3]
           general.probdists.cynicism[,8] <- temp[,4]
+        } 
+        
+        if (x[i] == 2) { # max
+          general.probdists.cynicism[,9] <- temp[,1]
+          general.probdists.cynicism[,10] <- temp[,2]
+          general.probdists.cynicism[,11] <- temp[,3]
+          general.probdists.cynicism[,12] <- temp[,4]
         } 
         
       }
@@ -696,7 +722,7 @@
       # Election Unresponsiveness ----
       temp <- matrix(NA, nrow = 1000, ncol = 4) # create empty matrices for results
       sim.results <- matrix(NA, nrow = 804, ncol = 4)
-      general.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 8)
+      general.probdists.unresp <- matrix(NA, nrow = 1000, ncol = 12)
       
       for(i in 1:length(x)){
         
@@ -709,7 +735,7 @@
                              clintonCoef[j,2]*mydata.general$alien.cynicism +
                              clintonCoef[j,3]*x[i] +
                              clintonCoef[j,4]*mydata.general$rep +
-                             clintonCoef[j,5]*mydata.general$dem +
+                             clintonCoef[j,5]*mydata.general$ind +
                              clintonCoef[j,6]*mydata.general$ideo7 +
                              clintonCoef[j,7]*mydata.general$income.q +
                              clintonCoef[j,8]*mydata.general$party.strength +
@@ -722,7 +748,7 @@
                            trumpCoef[j,2]*mydata.general$alien.cynicism +
                            trumpCoef[j,3]*x[i] +
                            trumpCoef[j,4]*mydata.general$rep +
-                           trumpCoef[j,5]*mydata.general$dem +
+                           trumpCoef[j,5]*mydata.general$ind +
                            trumpCoef[j,6]*mydata.general$ideo7 +
                            trumpCoef[j,7]*mydata.general$income.q +
                            trumpCoef[j,8]*mydata.general$party.strength +
@@ -735,7 +761,7 @@
                             otherCoef[j,2]*mydata.general$alien.cynicism +
                             otherCoef[j,3]*x[i] +
                             otherCoef[j,4]*mydata.general$rep +
-                            otherCoef[j,5]*mydata.general$dem +
+                            otherCoef[j,5]*mydata.general$ind +
                             otherCoef[j,6]*mydata.general$ideo7 +
                             otherCoef[j,7]*mydata.general$income.q +
                             otherCoef[j,8]*mydata.general$party.strength +
@@ -786,11 +812,18 @@
           general.probdists.unresp[,4] <- temp[,4]
         }
         
-        if (x[i] == 2) { # max
+        if (x[i] == 1) { # med
           general.probdists.unresp[,5] <- temp[,1]
           general.probdists.unresp[,6] <- temp[,2]
           general.probdists.unresp[,7] <- temp[,3]
           general.probdists.unresp[,8] <- temp[,4]
+        } 
+        
+        if (x[i] == 2) { # max
+          general.probdists.unresp[,9] <- temp[,1]
+          general.probdists.unresp[,10] <- temp[,2]
+          general.probdists.unresp[,11] <- temp[,3]
+          general.probdists.unresp[,12] <- temp[,4]
         } 
         
       }
@@ -830,85 +863,28 @@
               strip.text = element_text(size = 18))
       dev.off()
       
-      
       # Differences in Predicted Probabilities ----
       general.probdists.cynicism <- as.data.frame(general.probdists.cynicism)
       general.probdists.unresp <- as.data.frame(general.probdists.unresp)
       colnames(general.probdists.cynicism) <- c("clinton.lo","trump.lo","other.lo","dnv.lo",
+                                                "clinton.mid","trump.mid","other.mid","dnv.mid",
                                                 "clinton.hi","trump.hi","other.hi","dnv.hi")
       colnames(general.probdists.unresp) <- c("clinton.lo","trump.lo","other.lo","dnv.lo",
+                                              "clinton.mid","trump.mid","other.mid","dnv.mid",
                                               "clinton.hi","trump.hi","other.hi","dnv.hi")
       
-      t.test(general.probdists.cynicism$clinton.hi, general.probdists.cynicism$clinton.lo)
-      t.test(general.probdists.cynicism$trump.hi, general.probdists.cynicism$trump.lo)
-      t.test(general.probdists.cynicism$other.hi, general.probdists.cynicism$other.lo)
-      t.test(general.probdists.cynicism$dnv.hi, general.probdists.cynicism$dnv.lo)
+      # Cynicism
+      round(quantile(general.probdists.cynicism$clinton.hi - general.probdists.cynicism$clinton.lo, c(0.05, 0.5, 0.95)),3) # -0.033, [-0.071, 0.006]
+      round(quantile(general.probdists.cynicism$trump.hi - general.probdists.cynicism$trump.lo, c(0.05, 0.5, 0.95)),3)  # 0.075, [0.033, 0.115]*
+      round(quantile(general.probdists.cynicism$other.hi - general.probdists.cynicism$other.lo, c(0.05, 0.5, 0.95)),3)  # 0.016, [-0.009, 0.038]
+      round(quantile(general.probdists.cynicism$dnv.hi - general.probdists.cynicism$dnv.lo, c(0.05, 0.5, 0.95)),3) # -0.057, [-0.093, -0.018]*
       
-      t.test(general.probdists.unresp$clinton.hi, general.probdists.unresp$clinton.lo)
-      t.test(general.probdists.unresp$trump.hi, general.probdists.unresp$trump.lo)
-      t.test(general.probdists.unresp$other.hi, general.probdists.unresp$other.lo)
-      t.test(general.probdists.unresp$dnv.hi, general.probdists.unresp$dnv.lo)
+      # Election Unresponsiveness
+      round(quantile(general.probdists.unresp$clinton.hi - general.probdists.unresp$clinton.lo, c(0.05, 0.5, 0.95)),3) # -0.017, [-0.050, 0.018]
+      round(quantile(general.probdists.unresp$trump.hi - general.probdists.unresp$trump.lo, c(0.05, 0.5, 0.95)),3) # 0.000, [-0.032, 0.033]
+      round(quantile(general.probdists.unresp$other.hi - general.probdists.unresp$other.lo, c(0.05, 0.5, 0.95)),3) # 0.002, [-0.019, 0.023]
+      round(quantile(general.probdists.unresp$dnv.hi - general.probdists.unresp$dnv.lo, c(0.05, 0.5, 0.95)),3) # 0.015, [-0.017, 0.044]
       
-      
-      
-      
-      
-      
-      
-    # Plot ----
-    general.effect.cynicism <- mnl_pred_ova(model = general.mod, 
-                                            data = mydata.16,
-                                            xvari = "alien.cynicism",
-                                            by = 0.01,
-                                            seed = 219,
-                                            nsim = 10,
-                                            probs = c(0.025, 0.975))
-    general.effect.cynicism.backup <- general.effect.cynicism
-    
-    general.effect.unresp <- mnl_pred_ova(model = general.mod, 
-                                          data = mydata.16,
-                                          xvari = "elect.attn",
-                                          by = 1, 
-                                          seed = 219,
-                                          nsim = 500,
-                                          probs = c(0.025, 0.975))
-    general.effect.unresp.backup <- general.effect.unresp
-    
-    general.effect.cynicism <- general.effect.cynicism$plotdata
-    general.effect.unresp <- general.effect.unresp$plotdata
-    colnames(general.effect.cynicism)[1] <- "x"
-    colnames(general.effect.unresp)[1] <- "x"
-    general.effect.cynicism$category <- "Cynicism"
-    general.effect.unresp$category <- "Election Unresp."
-    
-    general.effect.df<- rbind(general.effect.cynicism, general.effect.unresp)
-    
-    pdf(height = 12, width = 12, "Figures/Probs-General.pdf")
-    ggplot(general.effect.df, aes(x = x, y = mean, colour = votechoice16)) +
-      geom_line(size = 2) +
-      geom_line(aes(y = lower), lty = "dashed") +
-      geom_line(aes(y = upper), lty = "dashed") +
-      labs(x = "", y = "Probability of Vote Choice") +
-      facet_grid(rows = vars(votechoice16), cols = vars(category), scales = "free_y") +
-      scale_colour_manual("", values = c("#377EB8","#E41A1C","#4DAF4A","#984EA3")) +
-      scale_x_continuous(breaks = c(0,1,2)) +
-      theme(axis.line = element_line(colour = "black"),
-            plot.subtitle = element_text(vjust = 1), 
-            plot.caption = element_text(vjust = 1), 
-            plot.margin = margin(0.5,3,0.5,0.5,"cm"),
-            legend.text = element_text(size = 18),
-            legend.position = "bottom",
-            panel.background = element_rect(fill = "white", colour = "black", size = 1),
-            panel.grid.major = element_line(linetype = "blank"), 
-            panel.grid.minor = element_line(linetype = "blank"),
-            axis.title = element_text(size = 22),
-            axis.text = element_text(size = 18),
-            strip.text = element_text(size = 18))
-    dev.off()
-    
-    general.effect.df[1,3]
-    t.sanders <- (est.sanders.h - est.sanders.l)/(sqrt(se.sanders.h^2 + se.sanders.l^2))
-    p.sanders <- 2*pnorm(-abs(t.sanders))
     
   # Vote Preference ----
     # Preference in General Election (Multinomial Logit) ----

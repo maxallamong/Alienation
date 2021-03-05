@@ -1,0 +1,1024 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber,style=chicago-authordate,uniquename=false,maxbibnames = 99]{biblatex}
+	\bibliography{Political Alienation.bib}
+\usepackage{multicol}
+\usepackage{ntheorem}
+	\theoremseparator{:}
+	\newtheorem{hyp}{Hypothesis}
+\usepackage{lscape}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{etoolbox}
+\AtBeginEnvironment{quote}{\singlespacing\small}
+\usepackage{multirow}
+\usepackage{fnpct}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage[title]{appendix}
+\usepackage{float}
+\usepackage{subcaption}
+	\captionsetup{belowskip=12pt,aboveskip=4pt}
+\usepackage{cleveref}
+\usepackage{graphicx}
+\usepackage{threeparttable}
+\usepackage{tablefootnote}
+\usepackage{setspace}
+	\interfootnotelinepenalty=10000
+\usepackage{fullpage}
+\usepackage{geometry}
+    \geometry{top=1in, bottom = 1in, left = 1in, right = 1in}
+\usepackage{endnotes}
+    \doublespacing
+    \setlength{\parindent}{1cm}
+	\setlength{\headsep}{0.3in}
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+
+
+
+
+%%%%PAPER INFO%%%%
+\title{Alie(n)ation: Political Outsiders in the 2016 U.S. Presidential Election}
+\author{Maxwell B. Allamong \thanks{Ph.D. Student of Political Science, Texas A\&M University, allamong@tamu.edu
+} }
+\date{\today}
+
+
+
+%%%%SPACING, START DOC, TITLE%%%%
+
+\begin{document}
+\maketitle
+\footnotetext[1]{Replication materials are available \href{https://github.com/maxallamong/Alienation}{\underline{here}}.}
+\thispagestyle{empty}
+\doublespacing
+
+
+
+
+
+ %%%% ABSTRACT %%%%
+\begin{abstract} 
+Political alienation describes a feeling of estrangement from the political system. While some have suggested that political alienation can lead to negative voting in national elections---that is, voting \textit{against} a particular candidate or entity---the mechanism through which alienation affects such behaviors remains unclear. What leads the alienated to cast negative votes and how do we know those votes signal a rejection of the political system? I argue that the politically alienated can channel their feelings of \textit{normlessness} and \textit{powerlessness} through their support for `political outsiders.' Combining open-ended responses from the 2016 American National Election Studies with newly developed text-analysis tools, I show that those harboring feelings of normlessness and powerlessness were more likely to `like' Trump for being an outsider. I also show that normlessness increased the likelihood of turning out to vote for outsiders like Donald Trump and Bernie Sanders, and that the vote-suppressing effect of powerlessness on turnout was weakened in 2016.
+\end{abstract}\clearpage\pagenumbering{arabic}
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                     %%
+%%   %   %    %  %%%%%  %%%%%  %%%%%   %%
+%%   %   % %  %    %    %   %  %   %   %%  
+%%   %   %  % %    %    %%%%%  %   %   %%
+%%   %   %   %%    %    %  %   %   %   %%
+%%   %   %    %    %    %   %  %%%%%   %%
+%%                                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+% What is the puzzle?
+% ANS: There is suggestive evidence that political alienation is related to negative voting, potentially even in national elections
+Political alienation describes a feeling of estrangement from the political system \parencite{citrin1975,olsen1969}. Perhaps unsurprisingly, the politically alienated show disproportionately low rates of political participation and interest \parencite{finifter1970dimensions,templeton1966}, and tend to hold more cynical views of political institutions and those who control them \parencite{mcdill1962status,thompson1960,templeton1966}. When they do participate, the alienated have been known to act in ways that convey their discontent, for instance, casting ``negative" votes against local referenda \parencite{horton1962powerlessness,mcdill1962status}. Some have suggested that these effects of alienation have the potential to spillover into national elections: \textcite{aberbach1969alienation} found that the distrustful were more likely to vote for the outsider, Barry Goldwater, in the 1964 presidential election, and \textcite{templeton1966} found that alienation was related to patterns of vote switching across the 1956 and 1960 presidential elections.
+
+% How will I solve the puzzle/what is my argument?
+% ANS: i'll argue that various dimensions of alienation should have specific effects on attitudes and behaviors
+ And yet, the mechanism through which feelings of alienation might affect attitudes and behaviors in national elections remains unclear. When and why might the alienated cast negative votes in national elections and how can we be sure that their votes are truly intended as a repudiation of the political system? I argue that the politically alienated can channel their attitudes of \textit{powerlessness} and \textit{normlessnss} \parencite{finifter1970dimensions} through their support for `political outsiders,' such as Donald Trump and Bernie Sanders in the 2016 U.S. presidential election. I argue further that these two categories of alienation will have somewhat nuanced effects on candidate evaluations and voting behavior: those harboring feelings of either \textit{powerlessness} or \textit{normlessness} will be more favorable towards political outsiders specifically because they represent a challenge to the political system, but only \textit{normlessness} will be a positive predictor of turn out and vote choice. On the other hand, \textit{powerlessness} is, by definition, the belief that one lacks the power to effect change through the political process, so there is no expectation that these attitudes will be expressed through turn out or vote choice. 
+ 
+ % How will I know if i'm right?
+ To empirically evaluate my argument, I rely on data from the American National Election Study (ANES). I begin by using a semi-automated text-analysis approach, the Structural Topic Model \parencite{roberts2014structural}, to explore open-ended survey responses describing what people liked about Trump. A topic emerges from the model that is directly related to Trump's status as a political outsider. The ability of the Structural Topic Model to incorporate co-variates allows me to show that feelings of \textit{powerlessness} and \textit{normlessness} additively increase the likelihood that people see candidates such as Trump as a `political outsider.' Then, I show that both dimensions of alienation affect one's decision to support outsiders at the ballot box: the vote-suppressing effect of \textit{powerlessness} in national elections was drastically weakened in 2016, while at the same time, \textit{normlessness} increased the likelihood of turning out to vote for Sanders in the Democratic primary and Trump in the Republican primary and general election. Together these findings help to explain the emergence and surprising success of two rather untraditional presidential candidates. 
+
+% What is the contribution/Why is this important?
+% ANS: I how, why, and when alienation is translated into negative votes, which as the election of Trump has made clear, is a strong driving force in contemporary american politics. 
+The findings presented here speak to a growing line of literature that is concerned with the repercussions of a decline in confidence in the American political system \parencite{Citrin2018,hetherington2015why}. Such a foundation of support is essential for the health and sustainability of our democracy \parencite{easton1965systems}, so it is vital that we identify the changes in political attitudes and behaviors that result from the erosion of that support. A crucial change that I identify in this project is alienated individuals' increased willingness to support candidates for office that present themselves as a challenge to our political system. If a sizable portion of the public continues to harbor feelings of alienation, this could drastically alter the types of candidates that choose to run for office, and ultimately, the types of individuals that wield political power. 
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%%   %      %  %%%%%     %%%%%  %%%%%  %   %   %  %%%%%  %  %  %   %%
+%%   %      %    %       %   %  %       % %    %  %      %  %  %   %%
+%%   %      %    %       %%%%%  %%%%%   % %    %  %%%%%  %  %  %   %%
+%%   %      %    %       %  %   %        %     %  %      %  %  %   %%
+%%   %%%%%  %    %       %   %  %%%%%    %     %  %%%%%  %%%%%%%   %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Political Alienation: Definition and Effects}
+% Broadly define alienation, motivate the use of separate "dimensions"
+What does it mean to be politically alienated? The definition given by \textcite[][3]{citrin1975} closely reflects the popular conceptualization of political alienation as a ``relatively enduring sense of estrangement from existing political institutions, values, and leaders." Typically, feelings of alienation are considered ``diffuse" \parencite{easton1965systems} in nature, meaning they stem from evaluations of the political system in the broadest sense, and not from evaluations of specific political actors or policies. This definition performs well in capturing the essence of political alienation, but the precise ways in which one is estranged from the political system, and how those feelings of estrangement might influence other political attitudes and behaviors, remain unclear. As such, a number of scholars have attempted to delineate the various \textit{modes}, \textit{dimensions}, or \textit{categories} of alienation. 
+
+% Define the two dimensions
+One of the first scholars to dissect the concept of alienation into its constitutive parts was the social psychologist Melvin \textcite{seeman1959}, who identified five different modes: \textit{powerlessness}, \textit{normlessness}, \textit{meaninglessness}, \textit{isolation}, and \textit{self-estrangement}. Early studies of political alienation often referred to this typology in their analyses \parencite{horton1962powerlessness,aberbach1969alienation,olsen1969}, with a particular emphasis being placed on the effects of powerlessness and normlessness. \textit{Powerlessness} is the belief that one's lacks the necessary means to effect change on the political system \parencite{seeman1959,olsen1969,finifter1970dimensions} and is closely (and inversely) related to the concept of \textit{political efficacy} \parencite{campbell1960american,gamson1961}. We might think of powerlessness as representing a feeling that one is incapable of affecting the ``inputs" to the political system \parencite{easton1965systems,almond1963civic}. \textit{Normlessness}, on the other hand, is the belief that the social rules or ``norms" that guide our political system have been lost. One might feel normless, for instance, if they believed that their representatives were only representing the interests of corporations, and not those of constituents. In this sense, normlessness flows from evaluations of the system's ``outputs" \parencite{easton1965systems,almond1963civic}. 
+
+% How does each dimension affect attitudes?
+The primary way in which feelings of alienation, including normlessness and powerlessness, are known to influence one's political attitudes is that they produce a sense of ``negativism" \parencite{horton1962powerlessness}. For instance, \textcite{thompson1960} found that the politically alienated were more likely to hold unfavorable views toward a local school bond referendum.\footnote{To measure alienation, \textcite{thompson1960} use an index that taps into both normlessness and powerlessness.} \textcite{citrin1975} also showed that the politically alienated held more negative evaluations of the current political climate and were more willing to support systemic change. Whether one's feelings of alienation and the negative attitudes that flow from them will translate into political \textit{action}, however, depends on the dimension of alienation, as well as the context in which those feelings might be expressed. 
+
+% How does each dimension affect behaviors?
+On the one hand, feelings of powerlessness often appear negatively related to several forms of political participation such as voting \parencite{horton1962powerlessness,aberbach1969alienation} and discussing politics with others \parencite{olsen1969,finifter1970dimensions}. Given that powerlessness if the belief that one is incapable of influencing the inputs to the political system, it is unsurprising that the politically powerless would not often use the political process to air their grievances. On the other hand, normlessness appears typically unrelated to political participation \parencite{finifter1970dimensions,olsen1969}, as those harboring such feelings may or may not see the political process as a viable mechanism for signaling their discontent. These two dimensions of alienation, though they may have similar effects on political attitudes, often have unique effects on political behaviors. 
+
+% Why does context matter?
+Context becomes a critical factor, then, as there may be situations in which the potential for expressing one's feelings of alienation through their political action becomes clearer, leading the powerless and normless to deviate from their typical behavioral patterns. One important context in which this can occur is elections, where the politically alienated may be motivated to cast ``negative" votes---that is, voting \textit{against} particular candidates, policies, or political entities. For this reason, several early studies of political alienation examined the effects of alienation in the context of local referenda where, unlike typical elections for office, voters are given the option to vote against a particular measure \parencite{mcdill1962status,horton1962powerlessness,thompson1960}. These studies were consistent in their finding that the politically alienated were disproportionately more likely to cast negative votes against the referendum.
+
+% What about the context of national elections? Why might outsiders matter here?
+ Less is known about whether the alienated can be primed to cast negative votes in the context of national elections. One reason for this gap in our knowledge is that opportunities for the alienated to cast such votes rarely arise, largely because referenda and initiatives do not occur at the national level in the United States. However, there are occasions in which the appeals made by particular candidates for office may signal to members of the mass public that a vote for that candidate is a vote \textit{against} the political system. These types of appeals are typically made by so-called `political outsiders,' and their presence in U.S. presidential elections is rare. Prior to 2016, the closest example in recent memory was Barry Goldwater's candidacy on the Republican ticket in the 1964 election. Goldwater's strong conservative positions, particularly his opposition to the Civil Rights Act, often placed him at odds with the other candidates, including member's of his own party. This observation lead \textcite{aberbach1969alienation} to suggest that part of Goldwater's support may have derived from the politically alienated---indeed, he found that (only) normlessness was related to voting for Goldwater among both Democrats and Republicans.\footnote{\textcite{aberbach1969alienation} also investigated the interactive effects of powerlessness and normlessness to test the proposition that those alienated on both dimensions would be \textit{more} likely to have been motivated to vote for Goldwater, but no support for an interactive relationship was found. A body of work further explored this interactive relationship---often referred to as the ``efficacy-trust mobilization" hypothesis---but the totality of evidence has suggested that the appropriate specification for these two variables is additive \parencite[e.g.,][]{sigelman1983efficacy,fraser1970mistrustful}.}
+ 
+ % Transition to theory....
+ Although Goldwater was outcast from his political party his status as U.S. Senator from Arizona preempted him from being a political outsider in the truest sense. Furthermore, while \citeauthor{aberbach1969alienation}'s (\citeyear{aberbach1969alienation}) analysis may have demonstrated a link between normlessness and voting for Goldwater, the motivation underlying the vote of the politically alienated remained unclear. In the next section, I will argue that the presence of two political outsiders in the 2016 election---Donald Trump and Bernie Sanders---provides an opportunity to re-examine the effects of alienation on one's attitudes and voting behaviors. 
+ 
+ 
+ %---powerlessess, however, reduced the likelihood of voting and was unrelated to vote choice
+
+% Lead us to the puzzle of negative votes in national elections...
+%Though it has been suggested that political alienation can lead to negative voting in the context of a national election, the mechanism underlying this process has yet to be identified. When and why might an alienated individual cast such a vote, and how can we be sure of their intention in casting it? In the next section, I argue that the presence of `political outsiders' in the 2016 U.S. presidential election provided the politically alienated with an opportunity to express their disaffection through their attitudes and their vote. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ %% EXTRA/OLD TEXT %%
+% negative vote
+%thompson and horton- alienated slightly less likely to vote, and more likely to hold negative attitude toward local referendum (index measure of alienation, akin to conbination of powerlessness and normlessness)
+%horton and thompson (1962) suggest a link between powerlessness and both attitudes AND behaviors, projection of feeling of powerlessness onto local symbols, resulting in a negative vote against local referenda
+
+ %\textcite{olsen1969} advanced our understanding of alienation by positing that many of the \textit{modes} or \textit{forms} of alienation posited by previous scholars, including \textcite{seeman1959}, fall into two broad categories: attitudes of \textit{incapability} and \textit{discontment}. \textit{Attitudes of incapability} refers to the feeling that one lack's the necessary means to engage with the political system, and includes forms of alienation such as \textit{guidelessness}, \textit{powerlessness} and \textit{meaninglessness} \parencite{olsen1969}. 
+ 
+%\parencite{thompson1960} ``not only apathy or indifference as a response to awareness of powerlessness, but also diffuse displeasure at being powerless and mistrust of those who do wield power"
+%\parencite{gamson1961} efficacy and trust
+
+%\textit{Powerlessness} is the sense that there are no viable means to make political change occur \parencite{finifter1970dimensions}. For instance, those feeling politically powerless might believe that they are unable to use elections to hold politicians accountable and that there is no alternative mechanism to influence the decisions that politicians make in office. This dimension can also be thought of as the opposite of political efficacy \parencite{Campbell1960}. \textit{Normlessness} describes one's belief that the informal rules that guide proper behavior within the political system have been lost \parencite{finifter1970dimensions}. Such norms include politicians' duty to faithfully represent their constituents' interests and to not exploit the trust that the people have placed in them. \textit{Meaninglessness} is the belief that the political system has no purpose \parencite{finifter1970dimensions}. Those harboring feelings of meaninglessness see political choices, such as the decision to vote or support a particular party, as largely trivial matters. And finally, \textit{isolation} is the sense that one's beliefs about the political system are totally incompatible with the rest of society. The isolated are not only estranged from existing institutions, values, and leaders, but reject them outright. 
+
+%From \citeauthor{finifter1970dimensions}'s (\citeyear{finifter1970dimensions}) conceptualization, it follows that an individual is alienated to the extent that their political attitudes load onto these various dimensions. For the most politically alienated among us, this would entail ``not only apathy or indifference as a response to awareness of powerlessness, but also diffuse displeasure at being powerless and mistrust of those who do wield power." \parencite{thompson1960}. It is the combination of these attitudes (apathy, powerlessness, distrust, etc.) that distinguishes the more general concept of alienation from any of its component pieces alone.
+
+ %To see why this is the case, imagine an individual that says they are very distrustful of the government in Washington. Will this person respond by paying closer attention to politics, perhaps in an attempt to monitor those that they distrust? Will they simply tune out of the political process? Previous inquiries into this question seem to suggest the former \parencite{Peterson2016}, that distrust primes political interest as a first step in sanctioning unruly politicians. However, we cannot fully understand the consequences of (dis)trust without considering individuals' beliefs about the viability of the political process. Those that both distrust the government and feel that they lack the means to make political change (i.e., the alienated) are unlikely to see any value in observing or participating in politics. The concept of political alienation captures these compound feelings in a way that measures of trust or efficacy alone cannot. 
+
+%Of course, political alienation is only conceptually useful to the extent that it informs us about meaningful changes in political behaviors and attitudes. Fortunately, previous scholars have outlined some of the behavioral and attitudinal changes that stem from feelings of alienation. In contrast to the positive relationship between distrust and interest found by \textcite{Peterson2016}, early investigations of the political consequences of alienation found that feelings of alienation \textit{reduced} rates of interest and participation in the political process. Looking at a local referendum that would have unified the city and county governments overseeing the Nashville metropolitan area, \textcite{mcdill1962status} find that the politically alienated were less likely to vote or express an opinion on the referendum. Among those that did vote or express an opinion, those opinions were were generally unfavorable or resentful, and the votes in opposition to the merger. \textcite{thompson1960} found nearly identical patterns in context of a school bond referendum in New York.
+
+%In the aforementioned examples, it may be noted that political alienation was affecting political participation at the local level. The proximate nature of the local issues at hand may have led the politically alienated to feel as though they had a real chance at effecting change, but can feelings of political alienation alter political attitudes and behaviors in the context of a national election? \textcite[][191]{thompson1960} do not rule out this possibility, but they do point out that the dominance of the two major parties in the candidate selection process and the inability to vote on specific issues should lead the politically alienated to be ``more likely to be found among the nonvoters." In the section to follow, however, I argue that the emergence of two candidates portrayed as political outsiders during the 2016 election, Donald Trump and Bernie Sanders, provided the politically alienated with a rare opportunity to make their voices heard at the national level. These candidates became viable by working within the two-party structure while maintaining their identities as political outsiders, giving the politically alienated an opportunity to show their discontent for the American political system by supporting these candidates.
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                              %%
+%%   %%%%%  %   %  %%%%  %%%%%   %%%%%  %   %   %%
+%%     %    %   %  %     %   %   %   %   % %    %%
+%%     %    %%%%%  %%    %   %   %%%%%    %     %%
+%%     %    %   %  %     %   %   %  %     %     %%
+%%     %    %   %  %%%%  %%%%%   %   %    %     %%
+%%                                              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Alienation and Outsiders in the 2016 Election}\label{sec:theory}
+The 2016 presidential election cycle provides a unique context in which to examine whether political alienation can lead to negative voting in a national election. As \textcite{templeton1966} noted long ago, most typical presidential elections feature establishment-type candidates from either party, and the debates tend to center around prominent political issues of the day. In these elections, feelings of alienation are likely to play only a minor role: feelings of powerlessness may dampen participation in the political process  as they typically do, while feelings of normlessness may take a backseat to partisan or ideological considerations \parencite{finifter1970dimensions}. The 2016 election, however, featured two political outsiders whose presence may have motivated the politically alienated to alter their typical behavior patterns to cast negative votes: Donald Trump, a New York businessman with no prior office-holding experience, infiltrated the ranks of the Republican Party and would go on to win the presidency over the Democratic candidate, Hillary Clinton, who many would consider the ultimate `political insider.' Bernie Sanders, as one of only a handful of independents to ever hold a seat in the US Senate, put up a serious fight in the 2016 Democratic primary. Compared to Goldwater, these two candidates come much closer to meeting the definition of a `political outsider.'
+
+How, specifically, will the effects of political alienation manifest in this context? As I have previously discussed, the two dimensions of political alienation---normlessness and powerlessness---have unique effects on attitudes and behaviors. Regarding one's attitudes, both dimensions of alienation are known to produce a sense of ``negativism"---that is, an orientation \textit{against} the existing political structures that entails a sense of cynicism or skepticism. These sort of negative appeals were made repeatedly throughout the campaign by both Donald Trump and Bernie Sanders. Consider the following statement from Trump who is tapping into the feelings of \textit{normlessness} when speaking at a campaign rally in Sioux City, Iowa \parencite{Jackson2016}:
+
+\begin{quote}
+	At the heart of this election is a simple question: will our country be governed by the people or will it be governed by the corrupt political class?
+\end{quote}
+
+\noindent Compare this to a statement from Democratic hopeful Bernie Sanders who said the following at the Brookings Institute the same day he announced his intention to seek the nomination \parencite{Dews2015}:
+
+\begin{quote}
+	There is a lot of sentiment that enough is enough, that we need fundamental changes, that the establishment -- whether it is the economic establishment, the political establishment, or the media establishment -- is failing the American people.
+\end{quote}
+
+\noindent Although Sanders and Trump sought nominations from opposing political parties, the message being conveyed by either candidate was the same---both were attempting to show that they were the ``anti-" candidates by describing the political system as failing and corrupt. I believe that these appeals rang loudest with the politically alienated, who are rarely given a chance to support a candidate that shares their negative orientation toward the political system. As a result, I expect that the politically alienated will hold favorable attitudes towards candidates like Trump and Sanders due specifically to their outsider statuses. 
+
+The effects of alienation on voting behaviors in the 2016 election are more nuanced. I argue that the presence of political outsiders in this election provided sufficient incentive for the powerless and normless to deviate from their typical behavior patterns. For the politically powerless, the typically negative relationship with participation may evaporate if the powerless joined the 2016 primary and general elections at rates higher than usual due to their willingness to support these political outsiders at the ballot box. We shouldn't necessarily expect the powerless to become the more likely than the powerful to turn out, but a comparison of the effects of powerlessness across several elections may reveal that its effect in the 2016 election was unique. For the politically normless, the rare opportunity to express one's feelings of discontentment through a negative vote may have been more apparent with Trump and Sanders in the race, thus increasing the likelihood that those feeling normless turned out to vote for them. Initial evidence to support this expectation comes from the 2016 presidential primary elections in New Hampshire where trust, which falls under the veil or normlessness, was related to voting for Sanders and Trump among Democrats and Republicans, respectively \parencite{dyck2018primary}. Although this partially supports my expectations, it remains unclear if this trend held in other primary elections, as well as in the general election. Furthermore, the motivation for casting those votes remains to be identified. The next section reveals my empirical strategy for testing these expected effects of political alienation on candidate evaluations and voting behaviors in the 2016 election. 
+
+
+
+
+
+
+
+ %% EXTRA/OLD TEXT %% 
+%Examining the attitudes and behaviors of the politically alienated in the 2016 election may help to unveil the process that would lead the politically alienated to cast negative votes in national elections. 
+
+%And while a lack of political connections or experience may be considered a vulnerability to some candidates, Trump and Sanders embraced the `outsider' label and incorporated appeals to the `alienated' in their campaign messaging. 
+
+%Did the presence of `political outsiders' in the 2016 election motivate the politically alienated to cast negative votes? If so, how can we be certain of their voting intentions? I argue that the politically alienated were provided with a rare opportunity to cast a negative vote in the 2016 election, and 
+
+%To begin, we must first consider the role of political alienation in typical national elections.  In such scenarios, there is little opportunity or motivation to express one's feelings of alienation through their voting behavior. However, this is not to say that feelings of alienation will be entirely irrelevant in typical national elections: feelings of \textit{powerlessness} are known to be associated with lower rates of political participation \parencite{}
+
+%But of course, the 2016 presidential election was, in many ways, atypical. Trump and Sanders entered their respective party's primary election as `political outsiders,' and to the surprise of many, climbed their way to the top their field. One of the primary reasons for their success, I believe, is the support they received from the politically alienated, who were provided with a rare opportunity channel their frustrations through their vote choice. 
+
+
+%making them an attractive option to alienated members of the mass public. The presence of these outsiders in the 2016 election, I believe, altered the attitudes of behaviors of the politically alienated in several observable ways. 
+
+%the politically alienated, whether they feel normless or powerless, should be attracted to candidates like Trump and Sanders specifically because they are political outsiders
+
+%In these elections, alienation is likely to play only a minor role in altering people's beliefs about the candidates or their decision to show up to the polls. As \textcite{templeton1966} noted long ago, most presidential elections feature establishment-type candidates from either party, and the debates tend to center around prominent political issues of the day. In such a scenario, partisan or ideological considerations may be far more influential in determining one's vote choice than feelings of alienation. However, this is not to say that feelings of alienation will be entirely irrelevant in typical national elections, as those that harbor attitudes of \textit{incapability} are likely to remain at home on election day. These attitudes have been shown to depress turnout in local elections \parencite[e.g.,][]{}, so it is reasonable to believe that these effects will persist in typical national elections. 
+%with far fewer political connections---and in Trump's case, less political experience---than the other candidates in the field. Instead of downplaying the fact that they were not established party figures, both candidates made their `outsider' status a central theme of their campaign. 
+
+ %First, we might expect the politically alienated---whether they feel \textit{normless} or \textit{powerless}---to have more favorable attitudes toward outsider candidates like Trump and Sanders specifically because they were willing to criticize the political system. The alienated are known to hold more cynical and negative views of symbols of power in the community \parencite{horton1962powerlessness,citrin1975}, so it seems to follow that the alienated would be more favorable towards candidates that hold those same views. Next, we
+
+%Such appeals, I believe, were successful in attracting the attention of the politically alienated, altering their attitudes and behaviors in several interesting and observable ways. 
+
+%whereas local referenda provide the opportunity for an explicitly negative vote through the option to vote `no' against a proposal, evidence of negative votes in national elections 
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                 %%
+%%   %%%%    %%%%%  %%%%%  %%%%%   %%       
+%%   %   %   %   %    %    %   %   %%
+%%   %   %   %%%%%    %    %%%%%   %%
+%%   %   %   %   %    %    %   %   %%       
+%%   %%%%    %   %    %    %   %   %%
+%%                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data and Methods}\label{sec:datamethods}
+To examine the effects of political alienation in the context of the 2016 U.S. Presidential Election, I rely upon data from the American National Election Studies (ANES). The ANES data are well-suited for my purposes, as they contain items that capture several dimensions of political alienation \parencite{mason1985}, as well as information on vote choice, party affiliation, and various demographics. Additionally, the data include open-ended responses about the things that respondents `like' about the two major parties' candidates for president, allowing me to examine, in their own words, the reasons that alienated voters may have felt attracted to a political outsider such as Trump. The remainder of this section will focus on describing these data in greater detail, along with my approach to model them.  
+
+%%% MEASURES %%%
+\subsection{Measures of Alienation}
+There are two primary independent variables of interest in the analyses to follow: \textit{cynicism} and \textit{election unresponsiveness}. The first, \textit{cynicism}, is derived from the `No Trust' and `Big Interests' items that are part of the ANES' `Cynicism' index \parencite{mason1985}. The `No Trust' item asks:
+
+\begin{quote}
+	``How often can you trust the federal government in Washington to do what is right?"
+\end{quote}
+
+\noindent with possible answers being (1) ``Always," (2) ``Most of the time," (3) ``About half the time," (4) ``\textit{Some of the time}," or (5) ``\textit{Never}." The `Big Interests' item asks: 
+
+\begin{quote}
+	``Would you say the government is pretty much run by a few big interests looking out for themselves or that it is run for the benefit of all people?"	
+\end{quote}
+
+\noindent with the possible responses being (0) ``For the benefit of all people" or (1) ``\textit{Run by a few big interests}." To form the \textit{cynicism} scale, respondents are given a point for each cynical answer (italicized) that they provide, creating a 3-point scale that ranges from 0 (No cynical answers) to 2 (All cynical answers). From their analysis of the various measures of political alienation contained in the ANES, \textcite{mason1985} conclude that the `No Trust' and `Big Interests' items that I am using here form ``a single latent construct reflecting a lack of trust in the ability of the federal government to act in ways that people regard as right and fair." (p. 145). From this definition, it is clear that this measure of \textit{cynicism} closely reflects attitudes of \textit{normlessness} \parencite{finifter1970dimensions}.
+
+The second variable, \textit{election unresponsiveness}, comes from a single item that asks:
+
+\begin{quote}
+	``How much do you feel that having elections makes the government pay attention to what people think?"
+\end{quote}
+
+\noindent to which individuals may respond (0) ``A good deal," (1) ``Some," or (2) ``Not much." This question captures attitudes of \textit{powerlessness}, specifically as it relates to elections. While others have used more general measures of political efficacy when operationalizing \textit{powerlessness} \parencite[e.g.,][]{aberbach1969alienation}, the \textit{election unresponsiveness} item is appropriately focused on the context in which I expect alienation to have an effect (i.e., elections).\footnote{Unfortunately, I am unable to perform further analyses using both \textit{cynicism} and the \textit{political efficacy} index as no respondents in the 2016 study were asked both sets of questions.}
+
+My argument regarding the effects of political alienation in national elections leads to three hypotheses that can be tested using these measures of alienation from the ANES. First, I expect that both \textit{cynicism} and \textit{election unresponsiveness} will increase the likelihood that a respondent `likes' Trump for being a political outsider (Hypothesis~\ref{hyp:candevals}). As I have argued, alienation on either dimension---\textit{powerlessness} or \textit{normlessness}---makes individuals more likely to look favorably upon candidates that present themselves as a challenge to the political system. Next, I expect that \textit{cynicism} will increase the likelihood that individuals turn out to vote for Sanders in the Democratic primary and for Trump in the Republican primary and general election (Hypothesis~\ref{hyp:cyn-voting}).  As scholars have noted, the two major parties' candidates for presidents are typically establishment figures \parencite{templeton1966}, so with Trump and Sanders in the race, those that were unsatisfied with the outputs of our political system---that is, those feeling \textit{normless}---were given a rare opportunity to use the national election process to signal their disaffection. Finally, I expect that \textit{election unresponsiveness} will be negatively related to turnout in national elections, but will have no relationship with turnout or vote choice in 2016. While the politically powerless are no doubt expected to admire candidates with anti-establishment qualities, their belief that elections are ineffective tools for sparking political change means that we should not expect the politically incapable to be \textit{more} likely to turnout and vote for outsiders. Instead, I expect that the (typical) vote-suppressing effects of incapability were weakened, and certainly not reversed, in 2016 due to the presence of `political outsiders' in the race. 
+
+% HYPOTHESES
+% 1
+\begin{hyp}\label{hyp:candevals}
+Cynicism and Election Unresponsiveness both increase the likelihood of `liking' Trump because he is a political outsider
+\end{hyp}
+
+% 2
+\begin{hyp}\label{hyp:cyn-voting}
+Cynicism increases the likelihood of turning out and voting for Sanders in the Democratic primary and for Trump in the Republican primary and general election
+\end{hyp}
+
+% 3
+\begin{hyp}\label{hyp:elect-voting}
+Election Unresponsiveness is negatively related to turnout in typical national elections, and unrelated to turnout and vote choice in the 2016 election
+\end{hyp}
+
+%and \textit{election unresponsiveness} will have distinct effects on voting behavior: \textit{cynicism} will increase the likelihood that individuals turn out to vote for Sanders in the Democratic primary and for Trump in the Republican primary and general election (Hypothesis~\ref{hyp:cyn-voting}), while \textit{election unresponsiveness} will decrease the likelihood that individuals turn out (Hypothesis~\ref{hyp:elect-voting}). As scholars have noted \parencite{templeton1966}, the two major parties' candidates for presidents are typically establishment figures. With Trump and Sanders in the race, those that were unsatisfied with the outputs \parencite{almond1963civic,easton1965systems} of our political system---that is, those holding attitudes of \textit{discontentment}---were given a rare opportunity to use the national election process to signal their disaffection. Those with attitudes of \textit{incapability}, on the other hand, are no doubt expected to admire the anti-establishment qualities of candidates like Trump (Hypothesis~\ref{hyp:candevals}), but their belief that elections are ineffective tools for sparking political change means that we shouldn't necessarily expect them to be \textit{more} likely than the politically capable to turnout in the 2016 election. Instead, I expect that \textit{incapability} will be negatively related to turnout in typical national elections, but that this relationship will weaken in 2016 due to the presence of `political outsiders' in the race. 
+
+%However, one's attitudes towards a candidate are not necessarily channeled into political behaviors. This may be especially true of the politically alienated, as those harboring attitudes of \textit{incapability}, by definition, feel as though the political structures typically used to voice one's concerns are ineffective. Therefore, I exp
+
+%There are three hypotheses that follow my argument that the presence of political outsiders in the 2016 election provided the politically alienated with an opportunity to voice their discontent for the political system. First, I expect that the alienated tended to vote at lower rates in previous national elections, but that this relationship will weaken in the 2016 election. While the alienated may have seen less value in turning out in previous elections, the presence of political outsiders should have motivated them to vote in 2016. Second, I expect that the politically alienated are attracted to candidates like Trump and Sanders specifically because they are political outsiders. When asked what they like about these candidates, the politically alienated should state that they see these candidates as presenting a challenge to the political system. Third and finally, I expect that the politically alienated will make their voices heard by voting for Sanders in the Democratic primary, and Trump in the Republican primary and general election.
+
+%%% OPEN-ENDED LIKES ABOUT TRUMP, STRUCTURAL TOPIC MODEL %%%
+\subsection{Open-Ended `Likes' about Trump and the Structural Topic Model}
+For decades, the ANES has included a number of open-ended questions that ask respondents what they like and dislike about the two major parties' candidates for president. To understand whether the politically alienated were attracted to Trump due to his status as a political outsider (Hypothesis~\ref{hyp:candevals}), I utilize the open-ended `likes' about Trump from the 2016 study.\footnote{Redacted versions of these open-ended responses---which are used in this analysis---are publicly available from the website of the American National Election Studies.} The question that I am interested in asked respondents:
+
+\begin{quote}
+``Is there anything in particular about Donald Trump that might make you want to vote for him?"
+\end{quote}
+
+\noindent If respondents provide a first thought, the interview follows up by asking ``anything else?" until the respondent says `no.'\footnote{For each respondent, their initial response and all follow-ups to the interviewers prime are contained in a single document (or cell) per respondent. There is no unique identifier to separate each respondents `likes' into different cells, so all mentions from a respondent must be analyzed together. Respondents that provided no `likes' about Trump are coded as Not Applicable (NA), and their data is not used in the estimation of the Structural Topic Model.} Of the 4,270 respondents in the 2016 sample, approximately 43\% (1,850 respondents) provided a response to this question. Unfortunately, this question was not asked about candidates in the primary election, so I am unable to explore what voters liked about Bernie Sanders. 
+
+In the past, the ANES has used human coders to sort the open-ended `likes' and `dislikes' into a fixed set of categories, but as of the writing of this manuscript the 2016 open-ended responses concerning the two presidential candidates have yet to be coded. Fortunately, several forms of (semi-) automated content analysis have emerged to assist researchers in categorizing large bodies of text \parencite{grimmer2013text}. I use one such approach, the Structural Topic Model \parencite{roberts2019stm}, to assist me in categorizing these open-ended `likes' about Trump. \textcite{roberts2014structural} has previously shown that the topics that emerge from a Structural Topic Model performed on open-ended responses the the `most important problem in Washington' question from the ANES closely mimic the ANES' manually-coded categories. As my results show, the STM also performs quite well with the open-ended `likes' about Trump. 
+
+The intuition behind the Structural Topic Model is simple: identify clusters of words that tend to co-occur (i.e., topics). This is the same basic intuition underlying more common forms of topic models such as LDA \parencite{Blei2003}, but the STM is unique in the sense that it allows researchers to include covariates that they suspect will affect 1) the use of certain topics (\textit{prevalence}), or 2) the use of specific words within a topic (\textit{content}) \parencite{roberts2014structural}. My expectation is that feelings of political alienation will increase the frequency with which respondents use the `political outsider' topic, so I choose to specify \textit{cynicism} and \textit{election unresponsiveness} as prevalence covariates.
+
+One advantage of the Structural Topic Model is that the researcher need not provide a set of `training' documents from which each topic should be built. Instead, the STM takes a `bottom-up' approach, allowing the machine to infer topics from the data. However, the STM does still require a small amount of supervision, as the researcher must decide the number of topics (\textit{K}) that are to be found. \textcite{roberts2019stm} note that there isn't necessarily a ``correct" number of topics for a given set of documents, and advise researchers to explore models that range in their number of topics, selecting one's model based on measures such as semantic coherence or exclusivity. Following this advice, I undertake an iterative process to narrow-in on a model with 26 topics.\footnote{Appendix~\ref{app:modelselection} provides a more detailed discussion of the process of selecting the number of topics.}
+
+%The generally short length of the open-ended responses leads the STM to produce topics that are quite specific in content, so I place my focus on understanding which qualities of respondents drive the use (i.e., prevalence) of particular topics. The STM is also unique in the sense that it takes a `bottom-up' approach, allowing the machine to infer topics from the data, as opposed to a `top-down' or supervised approach that requires researchers to inform the machine which latent categories are present in the text. However, the STM does still require a small amount of supervision, as the researcher must decide the number of topics that are to be found. \textcite{roberts2019stm} note that there isn't necessarily a ``correct" number of topics for a given set of documents, and advise researchers to explore models that range in their number of topics, selecting one's model based on measures such as semantic coherence or exclusivity. Following this advice, I undertake an iterative process to narrow-in on a model with 26 topics.\footnote{Appendix~\ref{app:modelselection} provides a more detailed discussion of the process of selecting the number of topics.} In this model, I specify `cynicism' and `election unresponsiveness' as \textit{prevalence} covariates, as I expect these variables to alter the frequency with which one draws upon particular topics when stating what they `like' about Trump.\footnote{Figures~\ref{fig:exploringtopics} and \ref{fig:coef-stm} derive from an STM that included an additive relationship between prevalence covariates.} The model outputs are presented in the \nameref{sec:results} section. 
+
+%%% MODELS OF VOTING BEHAVIOR %%%
+\subsection{Models of Voting Behavior}
+My examination of the effects of alienation on voting behavior in the 2016 election centers largely on the results of three models. I begin by using a multinomial logit to model the 2016 primary elections. Here, I restrict my sample to respondents from states that hosted open primaries on Super Tuesday in 2016 and use `vote choice' as the dependent variable with the options being ``Sanders, ``Trump," ``Other," and ``Did Not Vote."\footnote{``Other" includes all candidates other than Trump or Sander---regardless of partisanship---that ran in the 2016 primary elections.}\footnote{States hosting open primaries on Super Tuesday in 2016 include: Alabama, Arkansas, Georgia, Minnesota, Tennessee, Texas, Vermont, and Virginia.} Restricting my sample in this way allows me to avoid the possibility of unobserved time-dependencies that could arise from pooling respondents that voted at different points in the election cycle. Additionally, focusing on open primaries allows me to include both Democrats and Republicans in the same model, while also allowing for the possibility that some individuals voted for candidates of the out-party.
+
+ Next, I estimate a multinomial logit for the general election, where the dependent variable is once again `vote choice' with the options being ``Clinton," ``Trump," ``Other," and ``Did Not Vote." Unlike the model of the primary election, the sample for the general election is not restricted in any way. Both models include several co-variates that are known to influence both vote choice and turnout including partisanship (treated as categorical with `Independent' as the reference category), ideology (ranges from 1 = Extremely Liberal to 7 = Extremely Conservative), partisan strength (0 = pure independent to 3 = strong partisan), income (in quartiles), white (1 if white, 0 otherwise), female (1 if female, 0 otherwise), age (17-99 continuous), political interest (1 = not much interested to 3 = very much interested), and education (1 = less than high school to 5 = Masters or above).\footnote{See Appendix~\ref{app:variablecoding} for a list of all ANES variables used in this analysis.}
+
+Finally, I estimate a series of logistic regressions to model the effects of \textit{cynicism} and \textit{election unresponsiveness} on turnout in the last eight elections (including 2016). This allows me to show that the effects of alienation I find in 2016 are largely unique to that particular election cycle. These models also include a number of co-variates that confound the relationship between either category of alienation and turnout, including partisan strength, education, income, white, age, and an indicator for Independents (all coded the same as above). 
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                    %%
+%%   %%%%%  %%%%%  %%%%%  %   %  %     %%%%%  %%%%%   %%
+%%   %   %  %      %      %   %  %       %    %       %%
+%%   %%%%%  %%%%%  %%%%%  %   %  %       %    %%%%%   %% 
+%%   %  %   %          %  %   %  %       %        %   %%
+%%   %   %  %%%%%  %%%%%  %%%%%  %%%%%   %    %%%%%   %%
+%%                                                    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results}\label{sec:results}
+I begin by exploring the results of the Structural Topic Model. Figure~\ref{fig:exploringtopics} presents the top 8 topics from the 26-topic Structural Topic Model along with their expected topic proportions.\footnote{Figure~\ref{fig:alltopics} in Appendix~\ref{app:stmresults} shows the expected topic proportions for all 26 topics.} I have assigned a label to each topic based on the FREX words that are closely associated with each topic.\footnote{FREX words are those that are both Frequent and Exclusive to a topic \parencite{bischof2012summarizing}.} The topics that arise are both coherent and insightful: many respondent's stated that they liked Trump for his positions on immigration, the Supreme Court, and the economy; Trump's status as the alternative to his challenger, Hillary Clinton, was the topic with the highest expected proportion; and, of course, the `Make America Great Again' slogan was parroted by a fair number of respondents. Of particular interest, however, is the topic labeled `Political Outsider.' This topic is characterized by such words as `politician,' `career,' and `washington.' These words alone do not fully reveal the topic's contents, so I also provide several responses that dedicate a large portion of their content to this topic as shown in Figure~\ref{fig:exemplar}. These responses show that Trump was viewed by some as a political outsider that was ``not part of the political establishment." The second to last response in Figure~\ref{fig:exemplar} is particularly telling, as the respondent is indicating that a vote for Trump was a way of ``send[ing] a message that I as a voter would like to see some change in the political system." These sentiments seem to suggest that part of Trump's appeal was rooted in his lack of political experience and his willingness to challenge the political system.
+
+% Topic Proportions, Top 8 Topics
+\begin{figure*}[t!]
+	\centering
+	\begin{subfigure}[b]{0.48\textwidth}
+	\centering
+	\includegraphics[width=\linewidth]{Figures/top8topics.pdf}	
+	\caption{{\small Expected Topic Proportion for Top 8 Topics, Labels in Parentheses}}\label{fig:top8}
+	\end{subfigure}
+	\hfil
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{Figures/exemplar-texts.pdf}
+		\caption{{\small Exemplary Texts from `Political Outsider' Topic}}\label{fig:exemplar}
+	\end{subfigure}
+	\caption{Exploring Topics from STM}\label{fig:exploringtopics}
+	{\footnotesize }
+\end{figure*}
+
+Were the politically alienated particularly inclined to view Trump as a political outsider (Hypothesis~\ref{hyp:candevals})? To answer this question, I regress the proportion of a document dedicated to the `Political Outsider' topic on the measures of \textit{cynicism} and \textit{election unresponsiveness}, as well as partisanship and political interest, and present coefficient plots of the results in Figure~\ref{fig:coef-outsider}.\footnote{Results are also presented in Table~\ref{tab:top4mods} of Appendix~\ref{app:stmresults}.} In Figures~\ref{fig:coef-clinton}, \ref{fig:coef-business}, and \ref{fig:coef-supremecourt} I also present the results of similar models where the dependent variables is the document-topic proportion dedicated to other popular topics (`Alternative to Sec. Clinton,' `Business Experience,' and `Supreme Court,' respectively). I do not have specific expectations regarding the relationship between alienation and the use of these topics, and as we see, not such relationships exist. However, a clear relationship does exist between use of the `Political Outsider' topic and both \textit{cynicism} ($\hat{\beta} = 0.013, p < 0.001$) and \textit{election unresponsiveness} ($\hat{\beta} = 0.013, p < 0.001$), as indicated by the positive and statistically significant coefficient estimates for these variables in Figure~\ref{fig:coef-outsider}.\footnote{These effects are robust to the inclusion of a more extensive battery of co-variates including ideology, sex, race, education, and age (see Table~\ref{tab:outsider-controls} of Appendix~\ref{app:stmresults}).} Substantively, this means that those in either category of alienation---that is, those with feelings of \textit{normlessness} or \textit{powerlessness}---were more likely to say that they like Trump because he is a political outsider. It is important to note here that neither partisanship nor political interest---both of which are among the most influential predictors of political attitudes and behaviors---were related to the perception of Trump as an outsider. From this exercise, I have found clear support for Hypothesis~\ref{hyp:candevals}.
+
+% Cynicism and Unresponsiveness on Anti-Establishment Topics
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figures/STM-Additive-Topic12.pdf}
+        \caption{{\small Topic: Alternative to Sec. Clinton}} %12
+        \label{fig:coef-clinton}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.475\textwidth}  
+        \centering 
+        \includegraphics[width=0.8\textwidth]{Figures/STM-Additive-Topic5.pdf}
+        \caption{{\small Topic: Business Experience}} %5     
+        \label{fig:coef-business}
+    \end{subfigure}
+    \vskip\baselineskip
+    \begin{subfigure}[b]{0.475\textwidth}   
+        \centering 
+        \includegraphics[width=0.8\textwidth]{Figures/STM-Additive-Topic23.pdf}
+        \caption{{\small Topic: Political Outsider}} %23    
+        \label{fig:coef-outsider}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[b]{0.475\textwidth}   
+        \centering 
+        \includegraphics[width=0.8\textwidth]{Figures/STM-Additive-Topic2.pdf}
+        \caption{{\small Topic: Supreme Court}} %2    
+        \label{fig:coef-supremecourt}
+    \end{subfigure}
+    \caption{Coefficient Plots from Models of Topic Usage on Cynicism and Unresponsiveness}\label{fig:coef-stm}
+    \vspace{-8pt}
+    {\scriptsize Note: Estimates from Table~\ref{tab:candevals} in Appendix~\ref{app:stmresults}}
+    {\scriptsize \par}
+\end{figure*}
+	
+My next task is to examine the effects of cynicism and election unresponsiveness on voting behaviors in national elections, but especially the 2016 presidential election, with the expectation that cynicism will increase the likelihood of voting for Sanders in the 2016 primary elections and Trump in both the primary and general elections (Hypothesis~\ref{hyp:cyn-voting}), and that election unresponsiveness will be negatively related to turnout in typical national elections, but unrelated to turnout in 2016 (Hypothesis~\ref{hyp:elect-voting}). As previously noted, I use multinomial logits to model vote choice. Interpretation of the coefficients from a multinomial logit is notoriously tricky, however, as the coefficients represent the change in the log-odds of selecting a particular outcome \textit{over some baseline category} as the result of a one-unit increase in the predictor. Instead, researchers are encouraged to calculate and interpret more substantively meaningful quantities of interest \parencite{king2000making,paolino2020predicted}, so for both elections, I simulate the predicted probability of selecting each outcome (along with 90\% confidence intervals) as \textit{cynicism} and \textit{election unresponsiveness} move from their lowest (0) to their highest (2) values using the observed values approach \parencite{hanmer2013behind}.
+
+ % Vote Choice in Primary Election
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Figures/Probs-Primary}
+	\caption{Predicted Probabilities - Vote Choice in 2016 Primary Election}\label{fig:primary}
+	\vspace{-8pt}
+	{\scriptsize \textit{Note}: Estimates come from Multinomial Logit in Table~\ref{tab:primary} \par}
+\end{figure}
+
+I begin by examining the effects of alienation in the open primary elections held on Super Tuesday in 2016, with the model's output presented in Table~\ref{tab:primary} of Appendix~\ref{app:votemodels} and the predicted probabilities of vote choice presented in Figure~\ref{fig:primary}. Looking at the plots in the left column of Figure~\ref{fig:primary} we see that cynicism is clearly related to voting for Sanders or Trump in the primaries: moving from the lowest (0) to the highest (2) value of cynicism significantly increases the probability of voting for Sanders 7.8\% (90\% CI [0.038,0.115]) and for Trump by 8.5\% (90\% CI [0.013,0.131]). Figure~\ref{fig:primary} also shows that cynicism was negatively related to abstention, as well as voting for some candidate than Trump or Sanders: moving across the range of the cynicism scale reduced the probability of not voting by 10.7\% (90\% CI[-0.190,-0.022]) and the probability of voting for some other candidate by 4.9\% [90\% CI[-0.149, 0.049]), though this effect is only significant in the former case. 
+
+In the right panel of Figure~\ref{fig:primary} we see that the effects of election unresponsiveness on vote choice in the primaries are far less pronounced: increases in election unresponsiveness appear to \textit{reduce} the probability of voting for Sanders by 2.7\% (90\% CI[-0.075,0.014]) and increase the probability of not voting by 2.3\% (90\% CI[-0.049,0.99]), though the confidence intervals for these estimates overlap zero. There is essentially no effect of election unresponsiveness on the probability of voting for Trump or some other candidate. My findings that cynicism primed turnout in favor of Trump and Sanders in the primary elections and that election unresponsiveness was unrelated to turnout and vote choice are thus far consistent with Hypotheses~\ref{hyp:cyn-voting} and \ref{hyp:elect-voting}.
+
+% Vote Choice in General Election
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.8\linewidth]{Figures/Probs-General.pdf}
+	\caption{Predicted Probabilities - Vote Choice in 2016 General Election}\label{fig:general}
+	\vspace{-8pt}
+	{\scriptsize \textit{Note}: Estimates come from Multinomial Logit in Table~\ref{tab:general} \par}
+\end{figure}
+
+Now I turn to examining the effects of cynicism and election unresponsiveness in the general election. Table~\ref{tab:general} of Appendix~\ref{app:votemodels} shows the output from the multinomial logit and Figure~\ref{fig:general} shows the predicted probability of voting for Clinton, Trump, some other candidate, or not voting at all as cynicism and election unresponsiveness vary from their minimum to their maximum values. In the left column of Figure~\ref{fig:general}, we see that going from the least to the most cynical attitudes towards government significantly increases the probability of voting for Trump by 7.5\% (90\% CI[0.033,0.115]) and significantly decreases the probability of not voting (i.e., increases turnout) by 5.7\% (90\% CI[-0.093,-0.018]). Cynicism also appears to reduce the probability of voting for Clinton by 3.3\% (90\% CI[-0.071,0.006]) and for some other (third-party) candidate by by 1.6\% (90\% CI[-0.009,0.038]), but the confidence intervals for these differences in predicted probabilities clearly contain zero. Thus it appears that cynicism motivated turnout in favor of the political outsider in the general election (Trump) just as it did in the primaries; these findings are clearly consistent with Hypothesis~\ref{hyp:cyn-voting}.
+
+Turning now to the right column of Figure~\ref{fig:general}, we see that the effects of election unresponsiveness are again far less pronounced than the effects of cynicism: moving across the range of the election unresponsiveness scale produces a slight decrease in the probability of voting for Clinton (1.7\%, 90\% CI[-0.050,0.018]) and a slight increase in the probability of not voting at all (1.5\%, 90\% CI[-0.017,0.044]), though neither of these differences are statistically significant. Election unresponsiveness also appears to have essentially no relationship with voting for Trump or some other (third-party) candidate. Here again I have found support for part of Hypothesis~\ref{hyp:elect-voting} that election unresponsiveness would be unrelated to one's decision to turnout, and consequently, unrelated to one's decision to vote for Trump in 2016. 
+
+In order to fully support the expectations of Hypothesis~\ref{hyp:elect-voting}, however, I must also show that election unresponsiveness is negatively related to turnout in typical national elections. To do this, I use a series of logistic regressions to model turnout in each of the last eight presidential elections (1988-2016). These models include cynicism and election unresponsiveness as the primary predictors along with a range of co-variates including partisan strength, eduction, income, age, and indicators for `independent' and `white.' I have not hypothesized about the effects of cynicism in typical national elections, but if my argument is correct that the politically alienated channel their frustrations with the political system through their support for political outsiders---and given that Trump is the only outsider to compete in a general election in recent memory---then we might expect cynicism to only be related to turnout in 2016. From these models, I plot the \textit{cynicism} and \textit{election unresponsiveness} logit coefficients in Figures~\ref{fig:turnoutcoef-cynicism} and \ref{fig:turnoutcoef-unresponsiveness}, respectively.\footnote{Full model results are given in Table~\ref{tab:turnout} of Appendix~\ref{app:votemodels}.} 
+ 
+%While I have largely found support for my expectation regarding the effects of election unresponsiveness in the 2016 presidential election, my argument rests on the assumption that these effects are unique to this election cycle due to the presence of two `political outsider' candidates (i.e., Sanders and Trump). To determine if the effects of cynicism and election unresponsiveness that I have recovered are limited to the 2016 election---at least with regard to their ability to motivate one's decision to voice their feelings of alienation through their vote---I use a series of logistic regressions to model turnout in each of the last eight presidential elections (1988-2016). These models include cynicism and election unresponsiveness as the primary predictors along with a range of co-variates including partisan strength, eduction, income, age, and indicators for `independent' and `white.' Then, I plot the \textit{cynicism} and \textit{election unresponsiveness} logit coefficients from these models in Figures~\ref{fig:turnoutcoef-cynicism} and \ref{fig:turnoutcoef-unresponsiveness}, respectively.\footnote{Full model results are given in Table~\ref{tab:turnout} of Appendix~\ref{app:votemodels}.} 
+
+% Turnout (1988-2016)
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/Coef-Turnout-Cynicism.pdf}
+        \caption{{\small `Cynicism' Coefficient}}    
+        \label{fig:turnoutcoef-cynicism}
+    \end{subfigure}
+    \hfil
+    \begin{subfigure}[b]{0.475\textwidth}   
+        \centering 
+        \includegraphics[width=\textwidth]{Figures/Coef-Turnout-Unresponsive.pdf}
+        \caption{{\small `Election Unresponsiveness' Coefficient}}    
+        \label{fig:turnoutcoef-unresponsiveness}
+    \end{subfigure}
+    \caption{Coefficient Plots from Turnout Models, Estimated in Each Presidential Election Year, 1988-2016}\label{fig:turnoutcoefs}
+    \vspace{-8pt}
+    {\scriptsize \textit{Note:} Estimates from Table~\ref{tab:turnout} in Appendix~\ref{app:votemodels} \par}
+\end{figure*}
+
+The coefficient estimates for cynicism shown in Figure~\ref{fig:turnoutcoef-cynicism} suggest that it is rarely a motivator for turnout in general elections: in six of the last eight elections, the \textit{cynicism} coefficient is statistically indistinguishable from zero. This is not the case in 2008 and 2016, however, as cynicism is positive and significantly related to turnout in these elections. At the same time, election unresponsiveness appears to consistently depress turnout, with the coefficient on election unresponsiveness being negative and statistically distinguishable from zero in every presidential election between 1988 and 2012 (Figure~\ref{fig:turnoutcoef-unresponsiveness}). It is only during the 2016 general election that election unresponsiveness has no discernible effect on turnout, as the 90\% confidence interval on the estimate overlaps with zero.\footnote{The 90\% confidence interval's overlap with zero suggests that this estimate is not significant using a one-tailed test at $\alpha=0.05$. However, this effect does become significant if one applies a one-tailed test at $\alpha=0.10$.} This finding provide finding provides further support to Hypothesis~\ref{hyp:elect-voting} that election unresponsiveness would be negatively related to turnout in typical national elections. 
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%   %%%%%  %%%%%  %    %  %%%%%  %      %    %  %%%%%  %  %%%%%  %    %   %%
+%%   %      %   %  %%   %  %      %      %    %  %      %  %   %  %%   %   %%  
+%%   %      %   %  % %  %  %      %      %    %  %%%%%  %  %   %  %  % %   %%
+%%   %      %   %  %   %%  %      %      %    %      %  %  %   %  %   %%   %%
+%%   %%%%%  %%%%%  %    %  %%%%%  %%%%%  %%%%%%  %%%%%  %  %%%%%  %    %   %%
+%%                                                     					   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusion}\label{sec:conclusion}
+The feelings of estrangement that characterize political alienation often produce a sense of ``negativism" \parencite{horton1962powerlessness}. For the powerless, this typically results in a lack of participation, and for the normless, opportunities to translate one's negative attitudes into action are rarely available. However, I have argued and demonstrated that the 2016 U.S. presidential election cycle was one such opportunity for the politically alienated to cast negative votes at the national level due to the presence of two `outsider' candidates: Donald Trump and Bernie Sanders. In my analysis, I showed that the politically alienated---whether they harbored feelings of \textit{normlessness} or \textit{powerlessnes}---were more likely to say they liked Trump specifically because he stood opposed to the political system. Then, I showed that \textit{normlessness} had a substantial impact on voting behavior in the 2016 election, increasing the chance that one turned out to vote for Trump or Sanders in the primary and for Trump in the general election. And while \textit{powerlessness} appeared to have no effect on turnout (and consequently, vote choice) in 2016, I showed that this is an unusual occurrence, as \textit{powerlessness} has depressed turnout in the last seven presidential elections. 
+
+My finding that alienation can be channeled through support for `political outsiders' is consequential given that typical indicators of alienation, such as the level of trust in government, have fallen rapidly in recent decades \parencite{Citrin2018}. If feelings of alienation continue to swell in the American public, more opportunistic `outsiders' may emerge to try and meet the demand. My results also help us to understand that the way in which feelings of alienation will be expressed depends on whether they are feelings of normlessness or powerlessness: both dimensions of alienation can change peoples \textit{attitudes} about the political world, but have different effects on how we \textit{behave} in it. Understanding this distinction is crucial to determining exactly how feelings of alienation will manifest in the American public. 
+
+An important contribution of this work is that it helps to round-out our understanding of how a candidate like Trump, with no prior office-holding experience or political skills, could become the nominee for a major American political party, and eventually be elected president. Previous explanations have largely pointed to the power of identity as key drivers of Trump's success \parencite{sides2018identity} and, to be fair, identity was clearly a key component of the 2016 election. However, my argument regarding the effects of alienation is purely attitudinal as I have no reason to believe that the alienated share a cohesive sense of identity, especially considering that these attitudes are held among members of opposing parties.
+
+The lack of a cohesive identity is also what distinguishes alienation from another label that was commonly used to describe the appeal of both Trump and Sanders: populism. Populism is typically characterized as a struggle between the people vs. the elites or us vs. them \parencite{Lee2019}. As I have defined it, alienation certainly entails a disdain for ruling elites, but does not necessarily require one to identify with `the people.' In fact, the \textit{isolation} dimension of alienation may even entail an outright rejection of the will of the people. Populism and alienation may share similar features (i.e. resentment for the political system), but they are not one and the same. 
+
+Up to this point, I have remained agnostic about the specific sources of peoples' feelings of political alienation. As I have defined it, true feelings of alienation are unlikely to have developed rapidly in the lead-up to election day. These attitudes are supposed to be directed toward the political system as a whole, and given that our political system typically changes at a rather glacial pace, it follows that feelings of alienation should be slow-developing, as well. This is not to say, however, that feelings of political alienation that lie dormant cannot be activated. In fact, I believe that this was likely the case in 2016; Trump and Sanders both used their platforms to make clear to voters that they were the ``anti-" candidates in the race, and such appeals, as I have demonstrated, modified the typical relationship between  alienation and voting behavior. Identifying the specific source of such attitudes remain beyond the scope of this project, but provide fertile ground for future research. 
+
+
+
+
+% entire impact of the growth of political alienation in the American public requires that we u
+%feelings of normlessness, for instance, were shown to prime participation in the voting process. This could potentially be taken as a sign of a healthy and functioning democracy since those who are most dissatisfied with the current ``outputs" \parencite{easton1965systems} of our political system are using the proper legal channels to make their concerns known. \textit{Powerlessness}, on the other hand, typically leads people to forego the political process
+%may, in fact, be part of a healthy and functioning democracy, as they are an indicator of dissatisfaction with the current `outputs" \parencite{easton1965systems} of government which can potentially be remedied through more traditional channels of political action (e.g., elections, ballot initiatives). If alienation in the American public begins to manifest as feelings of \textit{powerlessness}, however, those traditional channels of political action may be ruled out in favor of forms of political action that are far more damaging to our democracy. The extent to which feelings of \textit{powerlessness} have developed as a result of the 
+%Both Donald Trump and Bernie Sanders successfully branded themselves as `political outsiders,' thereby attracting the support of politically alienated individuals of all partisan stripes that had become disenchanted with the American political system. 
+%The findings presented here also call for scholars to reconsider the qualities that citizens find attractive in their candidates. In the past, it may have been reasonable to assume that voters want candidates with relevant political experience and connections to the parties, yet many alienated voters liked Trump and Sanders specifically because they lacked these features. In an era where confidence in government is lacking \parencite{Citrin2018} and the parties have become increasingly polarized, we need to ask: what is the value of office-holding experience if voters feel that politicians are untrustworthy, corrupt, and do not represent their interests?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     %%%% BIBLIOGRAPHY %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\printbibliography
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%% APPENDIX %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGE
+\clearpage
+\appendix
+\begin{titlepage}
+   \vspace*{\stretch{1.0}}
+   \begin{center}
+      \Large\textbf{Alie(n)ation: Political Outsiders in the 2016 U.S. Presidential Election}\\
+      \large Appendix \\
+      \large\textit{Maxwell B. Allamong}
+   \end{center}
+   \vspace*{\stretch{2.0}}
+\end{titlepage}
+
+
+
+\begin{appendices}
+\begin{refsection}
+
+
+
+
+% DESCRIPTIVE STATISTICS
+%\section{Descriptive Statistics}\label{app:desc}
+
+
+
+
+% Histogram
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=0.9\linewidth]{Figures/histograms.pdf}
+%	\caption{Histograms of Political Alienation Scale, 1988-2016}\label{app:hist}
+%\end{figure}
+
+% Mean of alienation by PID
+%\begin{figure}[hp!]
+%	\centering
+%	\includegraphics[width=0.9\linewidth]{Figures/alienation-means.pdf}
+%	\caption{Mean of Political Alienation Index by Partisanship, 1988-2016}\label{app:alienation-means}
+%\end{figure}
+%\clearpage
+
+
+% Factor Loadings
+%\begin{table}[hp!]
+%	\centering
+%	\caption{Factor Loading - Political Alienation Index (2016)}\label{tab:factanal}
+%	\begin{tabular}{l|c}\hline
+%		\textit{Trust} & 0.77\\
+%		\textit{Corruption} & 0.67\\
+%		\textit{Few or All} & 0.72\\
+%		\textit{Elections} & 0.53 \\ \hline
+%	\end{tabular}
+%\end{table}
+
+%Principal Components Analysis
+%\begin{figure}[htp!]
+%	\centering
+%	\includegraphics[width = 0.7\linewidth]{Figures/alienation-pca.pdf}
+%	\caption{PCA of Political Alienation Index, 2016}\label{fig:pca}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+%%%% ANES CODING %%%%
+\clearpage
+\section{ANES Variables and Coding}\label{app:variablecoding}
+\singlespacing
+For each of the variables below, the codes presented in parentheses are the variable codes for the 2016, 2012, and CDF data files, respectively.
+
+\begin{itemize}
+	
+	% Political Alienation
+	\item \textbf{Cynicism}
+	\begin{itemize}
+		\item `No Trust'
+		\begin{itemize}
+			\item Variables: V161215; trustgov$\_$trustgrev; VCF0604
+			\item Question Wording: ``How often can you trust the federal government in Washington to do what is right?"
+			\item Coding: 1 = Always, 2 = Most of the time, 3 = About half of the time, 4 = Some of the time, 5 = Never
+		\end{itemize}
+		\item `Big Interests'	
+		\begin{itemize}
+			\item Variables: V161216; trustgov$\_$bigintrst; VCF0605
+			\item Question Wording: ``Would you say the government is pretty much run by a few big interests looking out for themselves or that it is run for the benefit of all the people?"
+			\item Coding: 1 = Run by a few big interests, 0 = For the benefit of all the people
+		\end{itemize}
+	\end{itemize}
+	
+	% Election Unresponsiveness
+	\item \textbf{Election Unresponsiveness}
+	\begin{itemize}
+		\item Variables: V161220; respons$\_$elections; VCF0624
+		\item Question Wording: ``How much do you feel that having elections makes the government pay attention to what the people think?"
+		\item Coding: 1 = A good deal, 2 = Some, 3 = Not much
+	\end{itemize}
+	
+	% Partisanship
+	\item \textbf{Partisanship}
+	\begin{itemize}
+		\item Variables: V161158x; pid$\_$self; VCF0301
+		\item Coding: indicators (1 = True, 0 otherwise) created for `Democrat,' `Independent,' and `Republican'
+		\item Note: `Democrat' is the reference category for several models included in this paper, therefore, only the `Republican' and `Independent' indicators are seen in the tables/figures the present the results of these models
+	\end{itemize}
+	
+	% Ideology
+	\item \textbf{Ideology}
+	\begin{itemize}
+		\item Variables: V161126; libcpre$\_$self; VCF0803
+		\item Coding: 1 = Extremely liberal, 2 = Liberal, 3 = Slightly liberal, 4 = Moderate; middle of the road, 5 = Slightly conservative, 6 = Conservative, 7 = Extremely conservative
+	\end{itemize}
+	
+	% White
+	\item \textbf{White}
+	\begin{itemize}
+		\item Variables: V161310x; dem$\_$racecps$\_$white; VCF0105a
+		\item Coding: 1 = White, 0 otherwise
+	\end{itemize}
+	
+	% Income
+	\item \textbf{Income}
+	\begin{itemize}
+		\item Variables: V161361x; inc$\_$incgroup$\_$pre; VCF0114
+		\item Coding:
+	\end{itemize} 
+	
+	% Female
+	\item \textbf{Female}
+	\begin{itemize}
+		\item Variables: V161342; gender$\_$respondent$\_$x; VCF0104
+		\item Coding: 1 = Female, 0 otherwise
+	\end{itemize}
+	
+	% Age
+	\item \textbf{Age}
+	\begin{itemize}
+		\item Variables:
+		\item Coding:
+	\end{itemize}
+	
+	% Education
+	\item \textbf{Education}
+	\begin{itemize}
+		\item Variables: V161270; dem$\_$edugroup$\_$x; VCF0110
+		\item Coding: 1 = Less than high school diploma, 2 = High school diploma or equivalent, 3 = Some college but no degree, 4 = Associates degree, 5 = Bachelors degree, 6 = Masters degree, 7 = Professional or doctorate degree
+	\end{itemize}
+	
+	% Political interest
+		\item \textbf{Political Interest}
+	\begin{itemize}
+		\item Variables:
+		\item Coding:
+	\end{itemize}
+	
+\end{itemize}		
+
+
+
+\doublespacing
+\clearpage
+
+
+
+
+
+
+
+%%%% STRUCTURAL TOPIC MODEL %%%%
+\section{Structural Topic Model}\label{app:stm}
+
+%% MODEL SELECTION
+\subsection{Model Selection}\label{app:modelselection}
+\textcite{roberts2014structural} note that there is not necessarily a correct number of topics for any given corpus. Instead, researcher are advised to generate a number of models while varying the number of topics, and then visually inspect the results. 
+
+To begin, I noted that the 2008 Likes/Dislikes about Candidates were manually coded by the ANES into roughly 30 categories, so I expect that roughly the same amount of categories in the 2016 data. As such, I use the \texttt{searchK} function from the \texttt{stm} package in R to generate performance diagnostics on models that range in the number of topics from 20 to 40. These diagnostics suggested that the most appropriate number of topics was somewhere in the mid to high 20s, so use the \texttt{searchK} function once again to generate diagnostics on models ranging from 22 to 28. The diagnostic values of these models are shown in Figure~\ref{app:searchKwide}. 
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{Figures/selectingK.pdf}
+	\caption{Determining the Number of Topics to Model, Diagnostics}\label{fig:searchKwide}
+\end{figure}
+
+In selecting the number of topics, we are looking for the held-out likelihood and semantic coherence to be high while the residuals should be low. The model with 25 topics seems to fit this pattern quite well. The residuals are clearly lowest in this model, and the held-out likelihood and semantic coherence are quite high. Therefore, I settle on the model with 25 topics. 
+
+Because the results of the STM are sensitive to initialization, I then use the \texttt{selectModel} function to generate several models, all with 25 topics. From each of the model runs, I plot the semantic coherence and exclusivity, shown in Figure~\ref{app:selectModel}. Notice that models 1 through 6 all show roughly the same values of semantic coherence and exclusivity. Because the models performed so similarly, I manually inspected the topic content from several of the models, and selected the model where the FREX (Frequent-Exclusive) words logically went together and a common theme could be discerned from exemplar texts. 
+
+% Select Model Diagnostics
+\begin{figure}[t!]
+	\centering
+	\includegraphics[width=0.6\linewidth]{Figures/selectModel.pdf}
+	\caption{Comparing Semantic Coherence and Exclusivity of Models with Various Initializations}\label{fig:selectModel}
+\end{figure}
+\clearpage
+
+
+%% TOPIC MODEL RESULTS
+\subsection{Model Results}\label{app:stmresults}
+
+% All 26 topics
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=1\linewidth]{Figures/alltopics.pdf}
+	\caption{Expected Topic Proportion for All 26 Topics}\label{fig:alltopics}
+\end{figure}
+
+% Topic Regression Table
+\begin{table}[!t] \centering 
+  \caption{Effect of Cynicism and Election Unresponsiveness on Topic Use (Top 4 Topics)}
+  \label{tab:top4mods}
+    \renewcommand{\arraystretch}{0.7}
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+\\[-1ex] 
+& \multicolumn{4}{c}{Topic}  \\\cline{2-5} \\[-1ex]
+& Alternative to & Business & Political & Supreme \\
+& Sec. Clinton & Experience & Outsider & Court \\[0.5ex]
+%& (1) & (2) & (3) & (4)\\
+\hline \\[-1ex] 
+  Cynicism & 0.004 & -0.002 & 0.013 & -0.000\\
+  & (0.006) & (0.003) & (0.005) & (0.005)\\
+  & & & & \\
+  Election Unresp. & 0.003 & -0.000 & 0.013 & 0.001\\
+  & (0.006) & (0.003) & (0.004) & (0.004)\\
+  & & & & \\
+  Independent & 0.007 & 0.006 & -0.002 & -0.002\\ 
+  & (0.015) & (0.009) & (0.015) & (0.012)\\
+  & & & & \\ 
+ Republican & 0.011 & 0.002 & -0.002 & 0.006 \\ 
+  & (0.010)& (0.006)& (0.009) & (0.008)\\
+  & & & & \\ 
+ Political Interest & 0.002 & -0.003 & -0.001 & 0.005 \\
+  & (0.005)& (0.003)& (0.005) & (0.005) \\
+  & & & & \\  
+ Constant & 0.039 & 0.060 & 0.030 & 0.033\\ 
+  & (0.018) & (0.010) & (0.016) & (0.016)\\
+  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 1,375 & 1,375 & 1,375 & 1,375 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\multicolumn{5}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; two-tailed tests} \\ 
+\multicolumn{5}{l}{\footnotesize Standard errors in parentheses} \\
+\multicolumn{5}{l}{\footnotesize Reference category for `Republican' and `Independent' is `Democrat'.} \\
+\multicolumn{5}{l}{\footnotesize Leaners are included as partisans.} \\
+\multicolumn{5}{l}{\footnotesize }
+\end{tabular} 
+\end{table} 
+
+
+% Outsider Topic with controls
+\begin{table}[!ht] \centering 
+  \caption{Effects of Cynicism and Election Unresponsiveness on Topic Usage}\vspace*{-0.25cm}
+  \label{tab:outsider-controls} 
+    \renewcommand{\arraystretch}{0.7}
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.3ex]
+\hline\hline \\[-1.8ex] 
+\\[-1ex] 
+& Political \\
+& Outsider  \\[0.5ex]
+& (1) \\[0.5ex]
+\hline \\[-0.5ex] 
+Cynicism           & 0.0130   \\
+                   & (0.005)  \\
+                   &          \\
+Election Unrest.   & 0.012    \\
+                   & (0.004)  \\
+                   &          \\
+Independent        & -0.006   \\
+                   & (0.015)  \\
+                   &          \\
+Republican         & 0.001    \\
+                   & (0.011)  \\
+                   &          \\
+Political Interest & -0.002   \\
+                   & (0.005)  \\
+                   &          \\
+Ideology           & -0.002   \\
+                   & (0.003)  \\
+                   &          \\
+Education          & 0.004    \\
+                   & (0.003)  \\
+                   &          \\
+White              & 0.007    \\
+                   & (0.008)  \\
+                   &          \\
+Female             & -0.005   \\
+                   & (0.006)  \\
+                   &          \\
+Age                & 0.000    \\
+                   & (0.000)  \\
+                   &          \\
+\hline \\[-1.8ex] 
+Observations & 1,375 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\multicolumn{2}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; two-tailed tests} \\ 
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses} \\
+\multicolumn{2}{l}{\footnotesize Reference category for `Republican' and} \\
+\multicolumn{2}{l}{\footnotesize \hspace{2pt} `Independent' is `Democrat'.} \\
+\multicolumn{2}{l}{\footnotesize Leaners are included as partisans.} \\
+%\multicolumn{2}{l}{\footnotesize }
+\end{tabular} 
+\end{table}
+
+
+
+%% INTERACTION BETWEEN CYNICISM AND ELECTION UNRESPONSIVENESS
+
+%% Political Outsider Topic - Cynicism*Elec.Unresp. Interaction Table
+%\begin{table}[!t] \centering 
+%  \caption{Interactive Effects of Cynicism and Unresponsiveness to Elections on Use of `Political Outsider' Topic}\vspace*{-0.25cm}
+%  \label{tab:outsider-int} 
+%    \renewcommand{\arraystretch}{0.7}
+%\begin{tabular}{@{\extracolsep{5pt}}lc} 
+%\\[-1.3ex]
+%\hline\hline \\[-1.8ex] 
+%\\[-1ex] 
+%& Political \\
+%& Outsider  \\[0.5ex]
+%& (1) \\[0.5ex]
+%\hline \\[-0.5ex] 
+%Cynicism                           & 0.0068             \\
+%                                   & (0.0077)           \\
+%                                   &                    \\
+%Unresponsive to Elections          & 0.0018             \\
+%                                   & (0.0125)           \\
+%                                   &                    \\
+%Cynicism $\times$ Unresp. to Elec. & 0.0066             \\
+%                                   & (0.0073)           \\
+%                                   &                    \\
+%Independent                        & -0.0021            \\
+%                                   & (0.0147)           \\
+%                                   &                    \\
+%Republican                         & -0.0019            \\
+%                                   & (0.0091)           \\
+%                                   &                    \\
+%Political Interest                 & -0.0013            \\
+%                                   & (0.0053)           \\
+%                                   &                    \\
+%Constant                           & 0.0374             \\
+%                                   & (0.0177)           \\
+%                                   &                    \\
+%\hline \\[-1.8ex] 
+%Observations & 1,375 \\ 
+%\hline 
+%\hline \\[-1.8ex] 
+%\multicolumn{2}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; two-tailed tests} \\ 
+%\multicolumn{2}{l}{\footnotesize Standard errors in parentheses} \\
+%\multicolumn{2}{l}{\footnotesize Reference category for `Republican' and `Independent' is `Democrat'.} \\
+%\multicolumn{2}{l}{\footnotesize Leaners are included as partisans.} \\
+%%\multicolumn{2}{l}{\footnotesize }
+%\end{tabular} 
+%\end{table}
+%
+%% Plot of Interaction of 'Cynicism' and 'Election Unresponsiveness' on Outsider Topic
+%\begin{figure}[h!]
+%	\centering
+%	\includegraphics[width=0.75\linewidth]{Figures/Probs-Interaction-OutsiderTopic}
+%	\caption{Interactive Effects of Cynicism and Election Unresponsiveness on Predicted Probability of `Political Outsider' Topic Usage}\label{fig:outsider-int}
+%\end{figure}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%%%%  %%%%%  %%%%%  %%%%%  %  %%%%%  %    %  %%
+%%  %      %      %        %    %  %   %  % %  %  %%
+%%  %%%%%  %%%%%  %        %    %  %   %  %  % %  %%
+%%      %  %      %        %    %  %   %  %   %%  %%
+%%  %%%%%  %%%%%  %%%%%    %    %  %%%%%  %    %  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%%%%  %%%%%  %%%%%  %%%%%  %  %%%%%  %    %  %%
+%%  %      %      %        %    %  %   %  % %  %  %%
+%%  %%%%%  %%%%%  %        %    %  %   %  %  % %  %%
+%%      %  %      %        %    %  %   %  %   %%  %%
+%%  %%%%%  %%%%%  %%%%%    %    %  %%%%%  %    %  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+% VOTING BEHAVIOR MODELS
+\clearpage
+\section{Models of Voting Behavior}\label{app:votemodels}
+
+% Turnout (1988-2016)
+\begin{table}[!htbp] \centering   \caption{Turnout in the 1988-2016 U.S. Presidential Elections}\label{tab:turnout} 
+	\begin{adjustbox}{width=\textwidth,center}	\begin{tabular}{@{\extracolsep{5pt}}lcccccccc} 	\\[-1.8ex]\hline 	\hline \\[-1.8ex] 	 & \multicolumn{8}{c}{\textit{Dependent variable:}} \\ 	\cline{2-9} 	 & 1988 & 1992 & 1996 & 2000 & 2004 & 2008 & 2012 & 2016 \\ 	\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\ 	\hline \\[-1.8ex]  Cynicism & $-$0.081 & $-$0.087 & 0.014 & $-$0.014 & 0.024 & 0.272$^{***}$ & 0.091 & 0.210$^{***}$ \\   & (0.090) & (0.089) & (0.103) & (0.100) & (0.117) & (0.115) & (0.086) & (0.053) \\   & & & & & & & & \\  Gov. Unresponsive & $-$0.242$^{***}$ & $-$0.169$^{**}$ & $-$0.233$^{**}$ & $-$0.415$^{***}$ & $-$0.342$^{**}$ & $-$0.594$^{***}$ & $-$0.252$^{***}$ & $-$0.079$^{*}$ \\   & (0.096) & (0.089) & (0.108) & (0.110) & (0.147) & (0.130) & (0.087) & (0.052) \\   & & & & & & & & \\  Partisan Strength & 0.619$^{***}$ & 0.382$^{***}$ & 0.565$^{***}$ & 0.424$^{***}$ & 0.552$^{***}$ & 0.680$^{***}$ & 0.493$^{***}$ & 0.143$^{***}$ \\   & (0.091) & (0.087) & (0.103) & (0.103) & (0.126) & (0.124) & (0.081) & (0.047) \\   & & & & & & & & \\  Education & 0.895$^{***}$ & 0.851$^{***}$ & 0.773$^{***}$ & 0.713$^{***}$ & 0.608$^{***}$ & 0.757$^{***}$ & 0.502$^{***}$ & 0.336$^{***}$ \\   & (0.090) & (0.086) & (0.099) & (0.098) & (0.124) & (0.129) & (0.060) & (0.035) \\   & & & & & & & & \\  Independent & 0.460$^{**}$ & $-$0.128 & 0.039 & $-$0.341 & $-$0.036 & 0.054 & $-$0.197 & $-$0.614$^{***}$ \\   & (0.269) & (0.232) & (0.301) & (0.281) & (0.361) & (0.321) & (0.219) & (0.142) \\   & & & & & & & & \\  Income & 0.502$^{***}$ & 0.447$^{***}$ & 0.435$^{***}$ & 0.341$^{***}$ & 0.292$^{***}$ & 0.144$^{**}$ & 0.189$^{***}$ & 0.082$^{***}$ \\   & (0.066) & (0.059) & (0.072) & (0.075) & (0.084) & (0.086) & (0.047) & (0.028) \\   & & & & & & & & \\  White & $-$0.185 & 0.248$^{**}$ & $-$0.005 & 0.084 & 0.381$^{**}$ & $-$0.044 & $-$0.228$^{*}$ & 0.143$^{**}$ \\   & (0.162) & (0.141) & (0.177) & (0.180) & (0.200) & (0.188) & (0.141) & (0.081) \\   & & & & & & & & \\  Age & 0.038$^{***}$ & 0.030$^{***}$ & 0.034$^{***}$ & 0.027$^{***}$ & 0.014$^{***}$ & 0.023$^{***}$ & 0.038$^{***}$ & 0.015$^{***}$ \\   & (0.004) & (0.004) & (0.005) & (0.005) & (0.006) & (0.006) & (0.004) & (0.002) \\   & & & & & & & & \\  Constant & $-$4.810$^{***}$ & $-$3.848$^{***}$ & $-$4.250$^{***}$ & $-$2.952$^{***}$ & $-$2.399$^{***}$ & $-$2.540$^{***}$ & $-$2.501$^{***}$ & $-$1.911$^{***}$ \\   & (0.448) & (0.404) & (0.511) & (0.502) & (0.552) & (0.559) & (0.345) & (0.198) \\   & & & & & & & & \\ \hline \\[-1.8ex] Observations & 1,492 & 1,914 & 1,336 & 1,233 & 901 & 921 & 2,387 & 3,910 \\ Akaike Inf. Crit. & 1,442.129 & 1,709.360 & 1,219.054 & 1,120.179 & 775.303 & 808.480 & 1,909.729 & 4,687.162 \\ 	\hline 	\hline \\[-1.8ex] 	\multicolumn{9}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; one-tailed tests} \\ 
+	\multicolumn{9}{l}{\footnotesize \textit{Note:} These are the regression estimates used to produce Figures~\ref{fig:turnoutcoef-cynicism} and \ref{fig:turnoutcoef-unresponsiveness}}	\end{tabular} 
+	\end{adjustbox}\end{table} 
+\clearpage
+
+
+% Vote Choice in Primary Election
+\begin{table}[!t] \centering   \caption{Effect of Cynicism and Election Unresponsiveness on Vote Choice in 2016 Primary Election, Multinomial Logit}   \label{tab:primary} 
+   \renewcommand{\arraystretch}{0.8}
+\begin{adjustbox}{width=0.6\textwidth,center}\begin{tabular}{@{\extracolsep{5pt}}lccc} \\[-1.8ex]\hline  \\[-2ex]  & Sanders & Trump & Did Not Vote \\ \hline \\[-1.8ex] \hline \\[-1.8ex] 
+ Cynicism & 1.086$^{***}$ & 0.612$^{**}$ & 0.029 \\   & (0.369) & (0.304) & (0.170) \\   & & & \\  Unresponsive to Elec. & $-$0.330 & 0.014 & $-$0.027 \\   & (0.312) & (0.215) & (0.156) \\   & & & \\  Republican & $-$1.879$^{**}$ & 16.297$^{***}$ & 0.255 \\   & (0.790) & (0.556) & (0.330) \\   & & & \\  Independent & $-$0.012 & 16.919$^{***}$ & 0.402 \\   & (0.864) & (0.513) & (0.541) \\   & & & \\  Ideology & $-$0.340$^{**}$ & 0.047 & 0.015 \\   & (0.173) & (0.159) & (0.094) \\   & & & \\  Income & 0.063 & 0.005 & 0.192$^{**}$ \\   & (0.156) & (0.117) & (0.086) \\   & & & \\  Partisan Strength & 0.359 & 0.719$^{***}$ & 0.469$^{***}$ \\   & (0.259) & (0.208) & (0.137) \\   & & & \\  Education & 0.323 & 0.686$^{***}$ & 0.354$^{***}$ \\   & (0.218) & (0.163) & (0.110) \\   & & & \\  White & 0.335 & 0.234 & $-$0.085 \\   & (0.458) & (0.451) & (0.258) \\   & & & \\  Female & $-$0.649 & $-$0.153 & 0.324 \\   & (0.420) & (0.307) & (0.217) \\   & & & \\  Age & $-$0.018 & 0.051$^{***}$ & 0.037$^{***}$ \\   & (0.014) & (0.010) & (0.007) \\   & & & \\  Constant & $-$3.087$^{**}$ & $-$25.216$^{***}$ & $-$5.679$^{***}$ \\   & (1.362) & (0.825) & (0.713) \\   & & & \\ \hline \\[-1.8ex] Akaike Inf. Crit. & 1,103.091 & 1,103.091 & 1,103.091 \\ 
+Observations =  & 602 & 602 & 602 \\\hline \hline \\[-1.8ex] \multicolumn{4}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; one-tailed tests} \\ 
+\multicolumn{4}{l}{\footnotesize Reference category for dependent variables is `Any candidate other} \\
+\multicolumn{4}{l}{\footnotesize than Trump or Clinton'} \\
+\multicolumn{4}{l}{\footnotesize Reference category for `Independent' and `Republican' is `Democrat'} \\
+\multicolumn{4}{l}{\footnotesize Analysis limited to Super Tuesday states with open primaries}\end{tabular} 
+\end{adjustbox}\end{table}
+
+% Vote Choice in General Election
+\begin{table}[!t] \centering   \caption{Effect of Cynicism and Election Unresponsiveness on Vote Choice in 2016 General Election, Multinomial Logit}   \label{tab:general} 
+   \renewcommand{\arraystretch}{0.8}
+\begin{adjustbox}{width=0.6\textwidth,center}
+\begin{tabular}{@{\extracolsep{5pt}}lccc} \\[-1.8ex]\hline  \\[-2ex]  & Clinton & Trump & Other \\ \hline \\[-1.8ex] \hline \\[-1.8ex] 
+ Cynicism & $-$0.032 & 0.328$^{***}$ & 0.266$^{**}$ \\   & (0.084) & (0.093) & (0.143) \\   & & & \\  Unresponsive to Elec. & $-$0.070 & $-$0.020 & $-$0.004 \\   & (0.081) & (0.081) & (0.127) \\   & & & \\  Independent & $-$2.023$^{***}$ & 1.928$^{***}$ & 0.150 \\   & (0.175) & (0.189) & (0.238) \\   & & & \\  Republican & $-$1.019$^{***}$ & 0.840$^{***}$ & $-$1.175$^{***}$ \\   & (0.230) & (0.273) & (0.341) \\   & & & \\  Ideology & $-$0.275$^{***}$ & 0.331$^{***}$ & 0.021 \\   & (0.048) & (0.055) & (0.081) \\   & & & \\  Income & 0.124$^{***}$ & 0.029 & 0.082 \\   & (0.044) & (0.045) & (0.069) \\   & & & \\  Partisan Strength & 0.287$^{***}$ & 0.118$^{*}$ & $-$0.610$^{***}$ \\   & (0.073) & (0.075) & (0.125) \\   & & & \\  Education & 0.409$^{***}$ & 0.149$^{***}$ & 0.232$^{***}$ \\   & (0.056) & (0.057) & (0.090) \\   & & & \\  White & $-$0.138 & 0.900$^{***}$ & 0.267 \\   & (0.124) & (0.153) & (0.213) \\   & & & \\  Female & 0.016 & 0.054 & 0.163 \\   & (0.112) & (0.113) & (0.175) \\   & & & \\  Age & 0.016$^{***}$ & 0.022$^{***}$ & $-$0.011$^{**}$ \\   & (0.003) & (0.003) & (0.006) \\   & & & \\  Constant & $-$1.077$^{***}$ & $-$5.997$^{***}$ & $-$1.805$^{***}$ \\   & (0.350) & (0.396) & (0.542) \\   & & & \\\hline \\[-1.8ex] Akaike Inf. Crit. & 5,247.994 & 5,247.994 & 5,247.994 \\ 
+Observations =  & 2,996 & 2,996 & 2,996 \\\hline \hline \\[-1.8ex] \multicolumn{4}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; one-tailed tests} \\ 
+\multicolumn{4}{l}{\footnotesize Reference category for the dependent variables is `Any candidate other} \\
+\multicolumn{4}{l}{\footnotesize than Trump or Clinton'} \\
+\multicolumn{4}{l}{\footnotesize Reference category for `Independent' and `Republican' is `Democrat'} \\\end{tabular} 
+\end{adjustbox}\end{table}
+
+% Vote Preference in General Election
+\begin{table}[!tp] \centering   \caption{Effect of Cynicism and Election Unresponsiveness on Vote Preference in 2016 General Election, Multinomial Logit}   \label{tab:general-pref} 
+   \renewcommand{\arraystretch}{0.8}
+\begin{adjustbox}{width=0.6\textwidth,center}\begin{tabular}{@{\extracolsep{5pt}}lcc} \\[-1.8ex]\hline  \\[-2ex]  & Trump & Other/Third-Party \\ \hline \\[-1.8ex] \hline \\[-1.8ex] 
+ Cynicism & 0.489$^{*}$ & 0.696$^{**}$ \\   & (0.297) & (0.329) \\   & & \\  Unresponsive to Elec. & 0.415$^{*}$ & 0.358 \\   & (0.272) & (0.293) \\   & & \\  Independent & 3.319$^{***}$ & 0.552 \\   & (0.820) & (0.812) \\   & & \\  Republican & 3.742$^{***}$ & 1.587$^{***}$ \\   & (0.524) & (0.555) \\   & & \\  Ideology & 0.438$^{**}$ & 0.113 \\   & (0.185) & (0.179) \\   & & \\  Income & $-$0.054 & $-$0.195 \\   & (0.155) & (0.169) \\   & & \\  Partisan Strength & 0.209 & $-$0.599$^{**}$ \\   & (0.285) & (0.325) \\   & & \\  Education & $-$0.532$^{***}$ & 0.062 \\   & (0.190) & (0.219) \\   & & \\  White & 1.388$^{***}$ & 0.210 \\   & (0.428) & (0.451) \\   & & \\  Female & $-$1.074$^{***}$ & $-$0.844$^{**}$ \\   & (0.408) & (0.440) \\   & & \\  Age & $-$0.008 & $-$0.068$^{***}$ \\   & (0.012) & (0.018) \\   & & \\  Constant & $-$3.801$^{***}$ & 0.707 \\   & (1.186) & (1.188) \\   & & \\ \hline \\[-1.8ex] Akaike Inf. Crit. & 387.221 & 387.221 \\ 
+Observations =  &  &  \\\hline \hline \\[-1.8ex] \multicolumn{3}{l}{\footnotesize $^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01; one-tailed tests} \\ 
+\multicolumn{3}{l}{\footnotesize Sample limited to non-voters in 2016 General Election} \\
+\multicolumn{3}{l}{\footnotesize Reference category for the dependent variables is `Clinton'} \\
+\multicolumn{3}{l}{\footnotesize than Trump or Clinton'} \\
+\multicolumn{3}{l}{\footnotesize Reference category for `Independent' and `Republican' is `Democrat'} \\\end{tabular} 
+\end{adjustbox}\end{table}
+
+
+
+\clearpage
+\printbibliography
+\end{refsection}
+\end{appendices}
+
+
+
+
+
+
+
+
+
+
+\end{document}∫

@@ -76,14 +76,16 @@
     select(documents, id, V161215, V161216, V161218, V161220,
            V162031x, V162062x, V161021, V161021a, 
            V161158x, V161267, V161270, V161310x, V161361x, V161126,
-           V161342, V161004, V161010e, V162038x, V162065x)
+           V161342, V161004, V161010e, V162038x, V162065x,
+           V161074)
   
   # Rename variables
   mydata.16 <- mydata.16 %>% 
     rename(trust = V161215, big.interests = V161216, corrupt = V161218, elect.attn = V161220, # alienation variables
            vote16 = V162031x, votechoice16 = V162062x, voteprimary16 = V161021, voteprimarychoice16 = V161021a, votepref16 = V162038x, # vote variables
            pid = V161158x, age = V161267, educ = V161270, race = V161310x, income = V161361x, ideo7 = V161126, # demographics
-           reg.vote = V162065x, sex = V161342, pol.int = V161004, state = V161010e) # demographics and state
+           reg.vote = V162065x, sex = V161342, pol.int = V161004, state = V161010e, # demographics and state
+           like.trump = V161074) # like trump
   
   # Reshape variables
   mydata.16 <- mydata.16 %>% 
@@ -127,6 +129,8 @@
     mutate(pol.int = ifelse(pol.int == 1, 3, # very much interested
                      ifelse(pol.int == 2, 2, # somehwhat interested
                      ifelse(pol.int == 3, 1, NA)))) %>% # not much interested
+    mutate(like.trump = ifelse(like.trump == 1, 1,
+                        ifelse(like.trump == 2, 0, NA))) %>%
     # mutate(vote16 = ifelse(vote16 == 0, 0, 
     #                 ifelse(vote16 == 1, 1, NA))) %>% # 1 = Voted, 0 = Did not vote
     mutate(vote16 = ifelse(reg.vote == 2, 1, 0)) %>%

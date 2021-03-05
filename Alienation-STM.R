@@ -132,6 +132,16 @@
     set.seed(46360)
     summary(alien.add, topics=c(12,5,23,2))
     
+    set.seed(46360)
+    alien.robust <- estimateEffect(c(23) ~  alien.cynicism + elect.attn + pid3 + pol.int +
+                                     ideo7 + educ + white + female + age,
+                                fit.add, meta = out$meta, uncertainty = "Global")
+    set.seed(46360)
+    summary(alien.robust, topics=c(23))
+    
+    
+    
+    
     # Interactive ----
     set.seed(46360)
     alien.int <- estimateEffect(c(23) ~ alien.cynicism * elect.attn + pid3 + pol.int,
@@ -289,6 +299,22 @@
     
     
     
+  # Save Document Topic Proportions w/ Meta Data ----
+    dt <- make.dt(fit.add, meta=metadata)    
+    dt <- dt %>%
+      mutate(outsider.topic = do.call(pmax, c(select(., c(2:27)), na.rm = T))) %>%
+      mutate(outsider.topic.b = ifelse(outsider.topic == Topic23, 1, 0))
+    
+    y <- lm(outsider.topic.b ~ alien.cynicism + elect.attn + pid3 + pol.int, data = dt)
+    summary(y)
+    
+    y <- lm(responded ~ alien.cynicism + elect.attn + pid3 + pol.int, data = mydata.16)
+    summary(y)
+    
+    y <- lm(like.trump ~ alien.cynicism + elect.attn + pid3 + pol.int, data = mydata.16)
+    summary(y)
+    
+    
 # Plots ----
         # Top 4 Topics
         # pdf(width = 5, height = 10, "Figures/alienation-outsider.pdf")
@@ -374,8 +400,7 @@
           dev.off()
           y$means[[1]][100]-y$means[[1]][1] # Inds: 1.4% to 7.1% = 5.7%
           
-# Save Document Topic Proportions w/ Meta Data ----
-  dt <- make.dt(fit.test, meta=meta)    
+
   dt$test <- as.numeric(quantcut(dt$Topic9, 10))
   dt <- dt %>%
     mutate(top9 = ifelse(Topic9 >= 0.2, 1, 0))
