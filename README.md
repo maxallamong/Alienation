@@ -1,10 +1,7 @@
 # Political Alienation and the Trump Vote in the 2016-2020 U.S. Presidential Elections
 
-<<<<<<< HEAD
 Repository for ``Political Alienation and the Trump Vote in the 2016-2020 U.S. Presidential Elections"
-=======
-Repository for ``Separating Cynicism from Inefficacy in the Study of Political Alienation: The Trump Elections of 2016 and 2020"
->>>>>>> 9b1bd4de899343bb55babaed5679ebcca6bb62f1
+
 
 ## Repository Contents
 
@@ -30,11 +27,9 @@ Repository for ``Separating Cynicism from Inefficacy in the Study of Political A
     
 ## Replicating the paper
 
-<<<<<<< HEAD
 As noted above, there are four scripts in this repository: `Alienation-Source.R`, `Alienation-Descriptives.R`, `Alienation-STM.R`, and `Alienation-VoteModels.R`. Running these scripts in their entirety will produce all of the empirical results found in the paper and the supplemental material. A short description of each script is provided below:
-=======
-As noted above, there are four scripts in this repository: `Alienation-Source.R`, `Alienation-Descriptives.R`, `Alienation-STM.R`, and `Alienation-VoteModels.R`. Running these scripts in their entirety will produce all of the empirical results found in the paper and the online appendix. A short description of each script is provided below:
->>>>>>> 9b1bd4de899343bb55babaed5679ebcca6bb62f1
+
+
 
 1.  `Alienation-Source.R`
 
