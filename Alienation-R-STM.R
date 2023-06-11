@@ -3,10 +3,6 @@
 # File: STM 
 # Updated: Jun. 11th, 2023
 
-# README ----
-  #  To replicate this analysis, set your working director to the folder that                   
-  #  contains the data files ("anes_timeseries_2016_redacted_openends.xlsx", "ANES-2016.dta", 
-  # "ANES-2012.dta", "ANES-CDF.dta"), and the source script ("Alienation-Source.R")                                              
 
 # Packages ----
 # Libraries ----

@@ -3,12 +3,6 @@
 # File: Vote Models 
 # Updated: Jun. 11th, 2023
 
-# README ----
-#  To replicate this analysis, first open the R Project file (Alienation.RProj).
-#  Next, simply run this entire script: it will automatically set the working directory to the
-#  folder that contains the R Project file, and then it will source the data from the source
-#  file (Alienation-Source.R).
-
 # Packages ----
   #install.packages(c("MASS", "nnet", "srvyr", "car", "svyVGAM",
                       #"coefplot", "survey", "stargazer", "tidyverse",

@@ -3,7 +3,6 @@
 # File: Descriptives 
 # Updated: Jun. 11th, 2023
 
-# README ----
 # Packages ----
 #install.packages(c("polycor","psych"))
 
