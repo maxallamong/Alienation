@@ -26,7 +26,7 @@ Repository for ``Political Alienation and the Trump Vote in the 2016-2020 U.S. P
     
 ## Replicating the paper
 
-As noted above, there are four scripts in this repository: `Alienation-Source.R`, `Alienation-Descriptives.R`, `Alienation-STM.R`, and `Alienation-VoteModels.R`. Running these scripts in their entirety will produce all of the empirical results found in the paper and the online appendix. A short description of each script is provided below:
+As noted above, there are four scripts in this repository: `Alienation-Source.R`, `Alienation-Descriptives.R`, `Alienation-STM.R`, and `Alienation-VoteModels.R`. Running these scripts in their entirety will produce all of the empirical results found in the paper and the supplemental material. A short description of each script is provided below:
 
 1.  `Alienation-Source.R`
 
