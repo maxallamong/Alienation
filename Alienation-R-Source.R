@@ -1,13 +1,13 @@
 # Maxwell B. Allamong
 # Political Alienation and the Trump Vote in the 2016-2020 U.S. Presidential Elections
 # File: Source 
-# Updated: Jun. 11th, 2023
+# Updated: Jun. 12th, 2023
 
 # Packages ----
-  # install.packages(c("stm","tm","SnowballC","wordcloud","quanteda","readtext",
-  #                    "readxl","haven","latex2exp", "ggiraphExtra","effects","MASS","nnet",
-  #                    "slam","Matrix","tidyverse","stargazer","corpus","splines",
-  #                    "sjPlot","data.table","wordcloud","gtools","here","conflicted"))
+  # install.packages(c("stm","tm","tidytext", "plyr", "dplyr",
+                       #"tidyverse", "stargazer", "readxl", "gtools",
+                       #"MASS", "nnet", "hunspell", "haven", "here",
+                       #"conflicted"))
 
 # Libraries ----
   library(stm) # 
@@ -556,7 +556,6 @@
     drop_na()
   
   cor(corfa.20)
-  scree(corfa.20)
   factanal(corfa.20, factors = 2)
   
   df.2020 <- mydata.20 %>%
@@ -591,7 +590,6 @@
     drop_na()
   
   cor(corfa.16)
-  scree(corfa.16)
   factanal(corfa.16, factors = 2)
   
   df.2016 <- mydata.16 %>%
@@ -632,7 +630,6 @@
     drop_na()
   
   cor(corfa.cdf)
-  scree(corfa.cdf)
   factanal(corfa.cdf, factors = 2)
   
   df.cdf <- mydata.cdf %>%
@@ -657,7 +654,7 @@
   
 # Write CSVs ----
   
-  write.csv(mydata.20, "Data/mydata-20-3.csv")
-  write.csv(mydata.16, "Data/mydata-16-3.csv")
-  write.csv(mydata.cdf, "Data/mydata-cdf-2.csv")
+  write.csv(mydata.16, "Data/ANES-2016-Cleaned.csv")
+  write.csv(mydata.20, "Data/ANES-2020-Cleaned.csv")
+  write.csv(mydata.cdf, "Data/ANES-CDF-Cleaned.csv")
   

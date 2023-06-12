@@ -18,7 +18,7 @@
 `%!in%` <- Negate(`%in%`)
 
 # Load Data ----
-  mydata.20 <- read.csv("Data/mydata-20-3.csv")
+  mydata.20 <- read.csv("Data/ANES-2020-Cleaned.csv")
   mydata.20 <- mydata.20[,-1] # remove unnecessary first column
   design.vars.20 <- mydata.20 %>%
     select(weight, strata, cluster, caseid, year) %>%
@@ -26,7 +26,7 @@
   mydata.20 <- mydata.20 %>%
     select(-weight, -strata, -cluster)
   
-  mydata.16 <- read.csv("Data/mydata-16-3.csv")
+  mydata.16 <- read.csv("Data/ANES-2016-Cleaned.csv")
   mydata.16 <- mydata.16[,-1] # remove unnecessary first column
   design.vars.16 <- mydata.16 %>%
     select(weight, strata, cluster, caseid, year, mode)

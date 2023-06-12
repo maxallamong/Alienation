@@ -1,10 +1,10 @@
 # Maxwell B. Allamong
 # Political Alienation and the Trump Vote in the 2016-2020 U.S. Presidential Elections
 # File: Vote Models 
-# Updated: Jun. 11th, 2023
+# Updated: Jun. 12th, 2023
 
 # Packages ----
-  #install.packages(c("MASS", "nnet", "srvyr", "car", "svyVGAM",
+  #install.packages(c("MASS", "nnet", "here", "srvyr", "car", "svyVGAM",
                       #"coefplot", "survey", "stargazer", "tidyverse",
                       #"texreg", "conflicted"))
 
@@ -25,9 +25,9 @@
     conflict_prefer("filter","dplyr")
     
 # Load Data ----
-  mydata.20 <- read.csv("Data/mydata-20-2.csv")
-  mydata.16 <- read.csv("Data/mydata-16-2.csv")
-  mydata.cdf <- read.csv("Data/mydata-cdf-2.csv")
+  mydata.20 <- read.csv("Data/ANES-2020-Cleaned.csv")
+  mydata.16 <- read.csv("Data/ANES-2016-Cleaned.csv")
+  mydata.cdf <- read.csv("Data/ANES-CDF-Cleaned.csv")
   #source("Alienation-ANES-Source.R")
   
   weights.2016 <- read_dta("Data/ANES/Survey Data/anes_timeseries_2016.dta") 
@@ -41,7 +41,7 @@
     rename(weight = VCF0009z, caseid = VCF0006, year = VCF0004)
   
 # Working Directory ----
-  #setwd(here())
+  setwd(here())
 # Analyses ----
   ## Turnout ----
     ### 2016-2020 ----
@@ -650,7 +650,7 @@
       
       probdists <- as.data.frame(probdists.turnout.cyn)
       colnames(probdists) <- c("lo.cyn","hi.cyn")
-      round(quantile(probdists$hi.cyn - probdists$lo.cyn, c(0.05, 0.5, 0.95)),3) # 13.9%, [5.6%, 22.4%]
+      round(quantile(probdists$hi.cyn - probdists$lo.cyn, c(0.05, 0.5, 0.95)),3) # 13.9%, [5.6%, 22.3%]
       
       # 2020
       mycoeff <- coef(full.mod.20) # save coefficients
@@ -1568,10 +1568,10 @@
                                                     "clinton.hi","other.hi","trump.hi","dnv.hi")
         
         # Cynicism
-        round(quantile(general.probdists.cynicism$clinton.hi - general.probdists.cynicism$clinton.lo, c(0.05, 0.5, 0.95)),3) # -14.5, [-26.1, -4.3]*
-        round(quantile(general.probdists.cynicism$trump.hi - general.probdists.cynicism$trump.lo, c(0.05, 0.5, 0.95)),3)  # 11.5, [0.6, 21.3]*
-        round(quantile(general.probdists.cynicism$other.hi - general.probdists.cynicism$other.lo, c(0.05, 0.5, 0.95)),3)  # 6.5, [-0.7, 12.6]
-        round(quantile(general.probdists.cynicism$dnv.hi - general.probdists.cynicism$dnv.lo, c(0.05, 0.5, 0.95)),3) # -2.8, [-10.4, 4.1]
+        round(quantile(general.probdists.cynicism$clinton.hi - general.probdists.cynicism$clinton.lo, c(0.05, 0.5, 0.95)),3) # -14.3, [-25.7, -3.8]*
+        round(quantile(general.probdists.cynicism$trump.hi - general.probdists.cynicism$trump.lo, c(0.05, 0.5, 0.95)),3)  # 11.3, [0.9, 21.2]*
+        round(quantile(general.probdists.cynicism$other.hi - general.probdists.cynicism$other.lo, c(0.05, 0.5, 0.95)),3)  # 6.6, [-0.8, 12.9]
+        round(quantile(general.probdists.cynicism$dnv.hi - general.probdists.cynicism$dnv.lo, c(0.05, 0.5, 0.95)),3) # -2.9, [-9.8, 3.9]
         
         # Inefficacy
         round(quantile(general.probdists.inefficacy$clinton.hi - general.probdists.inefficacy$clinton.lo, c(0.05, 0.5, 0.95)),3) # -3.7, [-10.8, 4.0]
