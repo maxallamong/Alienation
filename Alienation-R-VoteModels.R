@@ -1534,7 +1534,6 @@
         general.effects <- rbind(general.effect.cynicism, general.effect.inefficacy)
         general.effects$votechoice16 <- factor(general.effects$votechoice16, levels = c("Clinton","Other","Trump", "Did not vote"))
         
-        pdf(height = 12, width = 12, "Figures/Probs-General.pdf")
         ggplot(general.effects, aes(x = x, y = fit, colour = votechoice16)) +
           geom_line(size = 2) +
           geom_line(aes(y = lower), lty = "dashed") +
@@ -1555,8 +1554,7 @@
                 axis.title = element_text(size = 22),
                 axis.text = element_text(size = 18),
                 strip.text = element_text(size = 18))
-        dev.off()
-        
+
         # Differences in Predicted Probabilities ----
         general.probdists.cynicism <- as.data.frame(general.probdists.cynicism)
         general.probdists.inefficacy <- as.data.frame(general.probdists.inefficacy)
@@ -1879,7 +1877,6 @@
         general.effects <- rbind(general.effect.cynicism, general.effect.inefficacy)
         general.effects$votechoice16 <- factor(general.effects$votechoice16, levels = c("Biden","Other","Trump", "Did not vote"))
         
-        pdf(height = 12, width = 12, "Figures/Probs-General.pdf")
         ggplot(general.effects, aes(x = x, y = fit, colour = votechoice16)) +
           geom_line(size = 2) +
           geom_line(aes(y = lower), lty = "dashed") +
@@ -1900,8 +1897,7 @@
                 axis.title = element_text(size = 22),
                 axis.text = element_text(size = 18),
                 strip.text = element_text(size = 18))
-        dev.off()
-        
+
         # Differences in Predicted Probabilities ----
         general.probdists.cynicism <- as.data.frame(general.probdists.cynicism)
         general.probdists.inefficacy <- as.data.frame(general.probdists.inefficacy)
