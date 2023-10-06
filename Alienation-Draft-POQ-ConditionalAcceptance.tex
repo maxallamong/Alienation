@@ -68,8 +68,8 @@
 %%%%PAPER INFO%%%%
 \title{Political Alienation and the Trump Vote in the 2016--2020 U.S. Presidential Elections}
 \author{}
-%\author{Maxwell B. Allamong\thanks{Postdoctoral Associate, Duke Initiative on Survey Methodology, m.allamong@duke.edu} \\ \vspace{-1em} \textit{Duke University}}
-\date{\today}
+\author{Maxwell B. Allamong\thanks{Postdoctoral Associate, Duke Initiative on Survey Methodology, Polarization Lab, m.allamong@duke.edu} \\ \vspace{-1em} \textit{Duke University}}
+\date{}
 
 
 
@@ -81,8 +81,10 @@
 \thispagestyle{empty}
 
 
-
-
+\vspace{-1.5cm}
+\begin{center}
+    Forthcoming at \textit{Public Opinion Quarterly}
+\end{center}
  %%%% ABSTRACT %%%%
 \begin{abstract}  
  Following Donald Trump's surprising victory in the 2016 U.S. presidential election, some popular and scholarly sources suggested that Trump's candidacy may have been bolstered, in part, by the mobilization of ``politically alienated" voters. This argument is puzzling, however, as certain forms of political alienation are often negatively related to political participation, making it unclear whether or how alienation may have been related to turnout and to support for Trump at the ballot box. I shed light on this puzzle using data from the American National Election Studies, which contain measures of two dimensions of political alienation: \textit{inefficacy} and \textit{cynicism}. With these data I examine how either dimension relates to turnout and to vote choice in 2016 and in 2020. Cynicism emerges as a positive predictor of both turnout and the Trump vote in 2016, but not in 2020. Inefficacy, however, does not positively predict turnout or the Trump vote in either election. I offer a potential explanation for the diminished relationship between cynicism and mobilization in the 2020 elections by applying a Structural Topic Model to open-ended survey responses about Trump, which reveals a substantial decrease in the salience of Trump's ``political outsider" qualities during his re-election bid. 
@@ -231,7 +233,7 @@ A final, but nevertheless important, consideration is the contextual differences
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Data and Methods}\label{sec:datamethods}
-I examine the relationship between political alienation and voting behavior in the 2016 and 2020 U.S. presidential elections using data from the American National Election Studies.\footnote{For decades, the ANES has collected a nationally representative, probability-based sample of adult Americans in each presidential election year to better understand their political attitudes and behaviors. The 2016 ANES included both a face-to-face component (multi-stage stratified cluster sample; RR1 = 50\%) and an online component (sample drawn from USPS's delivery sequence file; RR1 = 44\%). The study was fielded pre-election from Sep. 7 to Nov. 7, 2016 and post-election from Nov. 9 to Jan. 8, 2017. The 2020 ANES included three variations of web surveys (web, web+phone, and web+video+phone), with respondents randomly drawn from the USPS's delivery sequence file (RR1 = 36.7\%). The study was fielded pre-election from Aug. 18 to Nov. 3, 2020 and post-election from Nov. 8 to Jan. 4, 2021.} The ANES data are well-suited for my purposes as they contain items that correspond to the two dimensions of alienation---inefficacy and cynicism---as well as information on vote choice, party affiliation, attitudes on topics like immigration and race, and various demographics. Here I describe the data and my modeling approach in greater detail.
+I examine the relationship between political alienation and voting behavior in the 2016 and 2020 U.S. presidential elections using data from the American National Election Studies.\footnote{For decades, the ANES has collected a nationally representative, probability-based sample of adult Americans in each presidential election year to better understand their political attitudes and behaviors. The 2016 ANES ($N = 4,271$ pre-election, $N = 3,649$ post-election) included both a face-to-face component (multi-stage stratified cluster sample; RR1 = 50\%) and an online component (sample drawn from USPS's delivery sequence file; RR1 = 44\%). The study was fielded pre-election from Sep. 7 to Nov. 7, 2016 and post-election from Nov. 9 to Jan. 8, 2017. The 2020 ANES ($N = 8,280$ pre-election, $N = 7,453$ post-election) included three variations of web surveys (web, web+phone, and web+video+phone), with respondents randomly drawn from the USPS's delivery sequence file (RR1 = 36.7\%). The study was fielded pre-election from Aug. 18 to Nov. 3, 2020 and post-election from Nov. 8 to Jan. 4, 2021. Full AAPOR disclosures can be found in SM~\ref{si:aapor}.} The ANES data are well-suited for my purposes as they contain items that correspond to the two dimensions of alienation---inefficacy and cynicism---as well as information on vote choice, party affiliation, attitudes on topics like immigration and race, and various demographics. Here I describe the data and my modeling approach in greater detail.
 
 Following \textcite{mason1985on}, I measure the inefficacy dimension of alienation using the inverse of the ANES' external efficacy index. This index includes two items that ask respondents to indicate their level of agreement with two statements, the first stating, ``Public officials don't care much what people like me think," (\textit{don't care}) and the second stating ``People like me don't have any say what the government does," (\textit{no say}).\footnote{Response options for both items: Agree strongly, Agree somewhat, Neither agree nor disagree, Disagree somewhat, Disagree strongly.} The first principal component from a principal components analysis of these two items forms my measure of inefficacy, re-scaled to range between 0 and 1 with higher values representing more inefficacious attitudes.\footnote{These two items load on a single factor with loadings above conventionally-accepted levels (see SM~\ref{si:desc:alienation}). The ANES data also includes a third efficacy item that asks people how complicated they find politics to be (\textit{complex}), but this item had a substantially lower factor loading and was therefore excluded.} The weighted mean of this variable is 0.614 (95\% CI [0.603, 0.625]) in 2016 and 0.667 (95\% CI [0.659, 0.674]) in 2020 (see SM~\ref{si:desc:alienation} for histograms of alienation measures). The correlation between cynicism and inefficacy measures is relatively low ($\sim$0.3), and the two dimensions are distinguishable in a factor analysis (see Tables~\ref{tab:fa-1620} and \ref{tab:fa-8812}, SM~\ref{si:desc:alienation}). 
 
@@ -466,8 +468,76 @@ Moving forward, the clearest route for future research on alienation is to explo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data \& Descriptives}\label{si:data} % data & descriptives
 
-\input{Tables/survey-items.tex}
-\clearpage
+\subsection{AAPOR Disclosures}\label{si:aapor}
+\singlespacing
+The empirical analyses in this paper use data from the \href{https://electionstudies.org/data-center/2016-time-series-study/}{2016} and \href{https://electionstudies.org/data-center/2020-time-series-study/}{2020} American National Election Studies (with supplementary analyses from the \href{https://electionstudies.org/data-center/anes-time-series-cumulative-data-file/}{ANES Cumulative Data File}). This section provides the AAPOR items for immediate disclosure. 
+
+\begin{enumerate}
+	\item Data Collection Strategy:
+	\begin{itemize}
+		\item The ANES is a quadrennial, nationally representative, probability-based survey of American adults.
+	\end{itemize}
+	
+	\item Conductor/Sponsor of Research: 
+	\begin{itemize}
+		\item Study funding by the National Science Foundation with grants to the University of Michigan (2016: SES-1444721, 2020: SES-1835721) and Stanford University (2016: SES-1444910, 2020: SES-1835022). The 2016 Principal Investigators were Vincent Hutchings and Ted Brader (University of Michigan), and Shanto Iyengar, Simon Jackman, and Gary Segura (Stanford University). The 2020 Principal Investigators were Ted Brader (University of Michigan) and Shanto Iyengar (Stanford University). Westat, Inc. performed the data collection. 
+	\end{itemize}
+	
+	\item Measurement Tools/Instruments:
+	\begin{itemize}
+		\item Question wording and ordering provided in SM~\ref{si:survey-items}, \ref{si:item-ordering}. Codebook for the 2016 ANES is linked \href{https://electionstudies.org/wp-content/uploads/2018/12/anes_timeseries_2016_userguidecodebook.pdf}{\underline{here}} and the codebook for the 2020 ANES is linked \href{https://electionstudies.org/wp-content/uploads/2022/02/anes_timeseries_2020_userguidecodebook_20220210.pdf}{\underline{here}}. 
+	\end{itemize}
+	
+	\item Population Under Study:
+	\begin{itemize}
+		\item 2016: U.S. citizens 18$+$ years of age living in 50 states or DC (web) or 48 states or DC (face-to-face). 
+		\item 2020: U.S. citizens 18$+$ years of age living in 50 states or DC
+	\end{itemize}
+	
+	\item Sample Generation and Recruitment:
+	\begin{itemize}
+		\item Both the 2016 and 2020 ANES use a probability-based (ABS), two-wave (pre- and post-election) panel design recruited via mail (also email in some cases). The sample frames were from the USPS Delivery Sequence File (provided by Marketing Systems Group). In 2016, the face-to-face sample was a complex, stratified, multi-stage cluster samples of addresses in the 48 contiguous states and DC, and the internet sample was a simple random sample of eligible addresses in the 50 states and DC. In 2020, the fresh cross-section was a similarly a simple random sample of eligible addresses in the 50 states and DC, although this study also included respondents from the 2020 GSS and re-interviews from the 2016 ANES, which were selected in slightly different methods. Full details available in the \href{https://electionstudies.org/wp-content/uploads/2016/02/anes_timeseries_2016_methodology_report.pdf}{\underline{2016}} and \href{https://electionstudies.org/wp-content/uploads/2022/08/anes_timeseries_2020_methodology_report.pdf}{\underline{2020}} ANES methodology reports. 
+	\end{itemize}
+	
+	\item Methods and Modes of Data Collection
+	\begin{itemize}
+		\item 2016: face-to-face using CAPI on laptops, and web
+		\item 2020: web, mixed web (web $+$ phone), and mixed video (video $+$ web $+$ phone)
+	\end{itemize}
+	
+	\item Dates of Data Collection:
+	\begin{itemize}
+		\item 2016: Pre-election from September 7, 2016, to November 7, 2016, and post-election from November 9, 2016, to January 8, 2017.
+		\item 2020: Pre-election from August 18, 2020, to November 3, 2020, and post-election from November 8, 2020, to January 4, 2021.
+	\end{itemize}
+	
+	\item Sample Sizes
+	\begin{itemize}
+		\item 2016: 4,271 pre-election interviews (1,181 FTF and 3,090 online), and 3,649 post-election re-interviews (1,059 FtF, 2,590 online)
+		\item 8,280 pre-election interviews and 7,453 post-election re-interviews
+	\end{itemize}
+	
+	\item Weighting
+	\begin{itemize}
+		\item The ANES creates detailed weights that account for selection, eligibility, nonresponse, within-household sampling, and demographics through raking. Full descriptions of the weights and weighting processes are provided on \href{https://electionstudies.org/wp-content/uploads/2016/02/anes_timeseries_2016_methodology_report.pdf}{pg. 78} of the 2016 methodology report and \href{https://electionstudies.org/wp-content/uploads/2022/08/anes_timeseries_2020_methodology_report.pdf}{pg. 80} of the 2020 methodology report. 
+	\end{itemize}
+	
+	\item Data Processing and Quality
+	\begin{itemize}
+		\item The ANES makes a serious effort to ensure the quality of their data, which includes pilot testing of materials, interviewer monitoring and training, spot-checking data as it arrives from the field, providing adequate compensation, making efforts to convert initial refusals, and more. Additional information on data quality in the ANES can be found \href{https://electionstudies.org/data-quality/}{here}. 
+		\item The author has made all replication materials publicly available \href{https://github.com/maxallamong/Alienation}{here}.
+	\end{itemize}
+	
+	\item Acknowledgement of Limitations of Research
+	\begin{itemize}
+		\item The author recognizes that all public opinion research, including the present research, has limitations and unmeasured error for which we cannot fully account. 
+	\end{itemize}
+\end{enumerate}
+\doublespacing
+
+
+\input{Tables/survey-items.tex} % survey items and question ordering
+
 
 \subsection{Descriptives}\label{si:desc} % descriptives
 
